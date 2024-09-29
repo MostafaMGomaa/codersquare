@@ -89,14 +89,14 @@ for Google + Facebook and maybe others (Github?).
 **Likes**:
 
 ```
-/likes/new [POST]
+/likes/  [POST]
 ```
 
 **Comments**:
 
 ```
-/comments/new  [POST]
-/comments/list [GET]
+/comments/     [POST]
+/comments/     [GET]
 /comments/:id  [DELETE]
 ```
 
