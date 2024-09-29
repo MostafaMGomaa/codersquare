@@ -80,8 +80,8 @@ for Google + Facebook and maybe others (Github?).
 **Posts**:
 
 ```
-/posts/list [GET]
-/posts/new  [POST]
+/posts/  [GET]
+/posts/  [POST]
 /posts/:id  [GET]
 /posts/:id  [DELETE]
 ```
