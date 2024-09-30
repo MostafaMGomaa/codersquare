@@ -1,14 +1,20 @@
-import { Column, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+
 import { AbstractEntitiy } from 'abstract.entity';
 import { User } from 'src/users/users.entity';
 
+@Entity('posts')
 export class Post extends AbstractEntitiy {
-  @Column()
+  @Column({ nullable: false })
   title: string;
 
   @Column()
   url: string;
 
+  @Column()
+  authorId: string;
+
   @ManyToOne(() => User, (user) => user.posts)
-  user: User;
+  @JoinColumn({ name: 'authorId' })
+  author: User;
 }

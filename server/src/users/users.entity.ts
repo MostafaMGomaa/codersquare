@@ -18,6 +18,6 @@ export class User extends AbstractEntitiy {
   @Column()
   password: string;
 
-  @OneToMany(() => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
 }
