@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import { UserDto } from './dto';
 import { CreateUserDto } from 'src/auth/dto';
+import { plainToClass, plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -39,7 +40,9 @@ export class UsersService {
    * @returns All Users in the DB.
    */
   async findAll(): Promise<UserDto[]> {
-    return await this.usersRepo.find();
+    const users = await this.usersRepo.find();
+    const transformedUsers = plainToInstance(UserDto, users);
+    return transformedUsers;
   }
 
   /**
