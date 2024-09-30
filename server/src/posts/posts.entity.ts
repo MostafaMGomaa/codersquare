@@ -1,7 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { AbstractEntitiy } from 'abstract.entity';
 import { User } from 'src/users/users.entity';
+import { Like } from 'src/likes/likes.entitiy';
 
 @Entity('posts')
 export class Post extends AbstractEntitiy {
@@ -17,4 +18,7 @@ export class Post extends AbstractEntitiy {
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'authorId' })
   author: User;
+
+  @OneToMany(() => Like, (like) => like.post)
+  likes: Like[];
 }

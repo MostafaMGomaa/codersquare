@@ -1,7 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+
 import { Post } from 'src/posts/posts.entity';
 import { User } from 'src/users/users.entity';
+import { Like } from 'src/likes/likes.entitiy';
 
 export const getTypeOrmConfig = (
   config: ConfigService,
@@ -12,6 +14,6 @@ export const getTypeOrmConfig = (
   username: config.get<string>('DATABASE_USERNAME'),
   password: config.get<string>('DATABASE_PASSWORD'),
   database: config.get<string>('DATABASE_NAME'),
-  entities: [User, Post],
+  entities: [User, Post, Like],
   synchronize: config.get<string>('NODE_ENV') === 'development',
 });
