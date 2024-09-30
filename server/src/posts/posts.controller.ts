@@ -23,6 +23,11 @@ export class PostsController {
     return await this.postsService.findPostsByUserId(req.user.id);
   }
 
+  @Get('/:id')
+  async getOnePostById(@Param('id') id: string) {
+    return this.postsService.findPostById(id);
+  }
+
   @Post('')
   async create(@Body() data: CreatePostDto, @Req() req) {
     return await this.postsService.create({

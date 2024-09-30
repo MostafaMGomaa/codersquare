@@ -18,6 +18,10 @@ export class PostsService {
     return this.postsRepo.save(post);
   }
 
+  async findPostById(id: string): Promise<Post> {
+    return this.postsRepo.findOneBy({ id });
+  }
+
   async findPostsByUserId(authorId: string): Promise<Post[]> {
     return this.postsRepo.findBy({ authorId });
   }
