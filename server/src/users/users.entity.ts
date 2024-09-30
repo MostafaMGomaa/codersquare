@@ -1,5 +1,5 @@
 import { AbstractEntitiy } from 'abstract.entity';
-import { Column, Entity, Unique } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User extends AbstractEntitiy {
