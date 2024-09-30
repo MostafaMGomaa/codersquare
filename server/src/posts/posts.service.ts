@@ -26,6 +26,23 @@ export class PostsService {
     return this.postsRepo.findBy({ authorId });
   }
 
+  async list(): Promise<Post[]> {
+    return this.postsRepo.find({
+      relations: ['author'],
+      select: {
+        author: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+  }
+
   async updatePostByPostIdAndUserId(
     postId: string,
     authorId: string,

@@ -24,6 +24,11 @@ export class PostsController {
     return await this.postsService.findPostsByUserId(req.user.id);
   }
 
+  @Get('/feed')
+  async getFeed() {
+    return this.postsService.list();
+  }
+
   @Get('/:id')
   async getOnePostById(@Param('id') id: string) {
     return this.postsService.findPostById(id);
