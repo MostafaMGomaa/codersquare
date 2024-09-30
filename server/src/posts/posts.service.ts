@@ -40,4 +40,13 @@ export class PostsService {
     await this.postsRepo.update({ id: postId }, data);
     return 'Post updated successfully';
   }
+
+  async delete(postId: string, authorId: string): Promise<string> {
+    await this.postsRepo.delete({
+      id: postId,
+      authorId,
+    });
+
+    return 'Post deleted successfully';
+  }
 }

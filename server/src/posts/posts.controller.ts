@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -49,6 +50,12 @@ export class PostsController {
       data,
     );
 
+    return { data: { message } };
+  }
+
+  @Delete(':id')
+  async deletePostById(@Param('id') postId: string, @Req() req): Promise<any> {
+    const message = await this.postsService.delete(postId, req.user.id);
     return { data: { message } };
   }
 }
