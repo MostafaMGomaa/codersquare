@@ -1,5 +1,6 @@
+import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntitiy } from 'abstract.entity';
-import { Column, Entity } from 'typeorm';
+import { Post } from 'src/posts/posts.entity';
 
 @Entity({ name: 'users' })
 export class User extends AbstractEntitiy {
@@ -16,4 +17,7 @@ export class User extends AbstractEntitiy {
 
   @Column()
   password: string;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 }
