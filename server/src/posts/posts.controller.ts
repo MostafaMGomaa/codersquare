@@ -19,13 +19,11 @@ export class PostsController {
   constructor(private postsService: PostsService) {}
 
   @Get('')
-  @UseGuards(AuthGuard)
   async getUserPosts(@Req() req) {
     return await this.postsService.findPostsByUserId(req.user.id);
   }
 
   @Post('')
-  @UseGuards(AuthGuard)
   async create(@Body() data: CreatePostDto, @Req() req) {
     return await this.postsService.create({
       title: data.title,
@@ -35,7 +33,6 @@ export class PostsController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
   async updateUserPost(
     @Param('id') postId: string,
     @Body() data: UpdatePostDto,
