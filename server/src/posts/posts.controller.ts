@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 
 import { PostsService } from './posts.service';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { CreatePostDto } from './dto';
+import { CreatePostDto, UpdatePostDto } from './dto';
 
 @Controller('posts')
 @UseGuards(AuthGuard)
@@ -23,5 +32,21 @@ export class PostsController {
       url: data.url,
       authorId: req.user.id,
     });
+  }
+
+  @Patch(':id')
+  @UseGuards(AuthGuard)
+  async updateUserPost(
+    @Param('id') postId: string,
+    @Body() data: UpdatePostDto,
+    @Req() req,
+  ) {
+    const message = await this.postsService.updatePostByPostIdAndUserId(
+      postId,
+      req.user.id,
+      data,
+    );
+
+    return { data: { message } };
   }
 }

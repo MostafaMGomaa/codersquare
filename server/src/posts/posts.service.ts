@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './posts.entity';
-import { PostDto } from './dto';
+import { PostDto, UpdatePostDto } from './dto';
 
 @Injectable()
 export class PostsService {
@@ -20,5 +20,20 @@ export class PostsService {
 
   async findPostsByUserId(authorId: string): Promise<Post[]> {
     return this.postsRepo.findBy({ authorId });
+  }
+
+  async updatePostByPostIdAndUserId(
+    postId: string,
+    authorId: string,
+    data: Partial<UpdatePostDto>,
+  ): Promise<string> {
+    const dbPost = await this.postsRepo.findOneBy({ id: postId, authorId });
+
+    if (!dbPost) {
+      throw new NotFoundException();
+    }
+
+    await this.postsRepo.update({ id: postId }, data);
+    return 'Post updated successfully';
   }
 }
