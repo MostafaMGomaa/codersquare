@@ -10,6 +10,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepo: Repository<User>,
   ) {}
+
   /**
    * Creates a new user with the provided data.
    *
