@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntitiy } from 'abstract.entity';
 import { User } from 'src/users/users.entity';
 import { Like } from 'src/likes/likes.entitiy';
+import { Comment } from 'src/comments/comments.entity';
 
 @Entity('posts')
 export class Post extends AbstractEntitiy {
@@ -21,4 +22,7 @@ export class Post extends AbstractEntitiy {
 
   @OneToMany(() => Like, (like) => like.post)
   likes: Like[];
+
+  @OneToMany(() => Comment, (comment) => comment.postId)
+  comments: Comment[];
 }
