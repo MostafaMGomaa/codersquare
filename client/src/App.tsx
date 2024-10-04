@@ -1,8 +1,5 @@
-
 function App() {
+  return 'Hi there';
+}
 
-  return "Hi there"
-  
-  }
-
-export default App
+export default App;
