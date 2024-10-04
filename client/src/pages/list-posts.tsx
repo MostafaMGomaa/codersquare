@@ -17,14 +17,18 @@ export const ListPosts = () => {
     return <div>Error loading posts</div>;
   }
 
+  let count = `5 comments`;
+
   return (
-    <div>
+    <div className="flex flex-col gap-y-7 gap-x-0.5 place-items-start justify-center container px-[1rem] py-4">
       {data &&
         data.map((post) => (
-          <div key={post.id}>
-            <h3>{post.title}</h3>
-            <p>URL: {post.url}</p>
-            <p>Author ID: {post.authorId}</p>
+          <div className="flex items-center gap-1.5" key={post.id}>
+            <p className="font-bold text-gray-600">{post.title}</p>
+            <span className="text-gray-400"> ({post.url})</span>
+            <button className="border border-gray-400 text-gray-400 px-6 py-[1px] rounded-md text-center text-sm ml-5">
+              {count}
+            </button>
           </div>
         ))}
     </div>
