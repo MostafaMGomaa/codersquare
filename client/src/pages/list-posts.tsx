@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
 
 import { Post } from '@codersquare/shared';
 import { getAllPosts } from '../api';
@@ -30,10 +29,4 @@ export const ListPosts = () => {
         ))}
     </div>
   );
-};
-
-export const ViewPost = () => {
-  const { id } = useParams();
-
-  return <div>Viewing Post {id}</div>;
 };

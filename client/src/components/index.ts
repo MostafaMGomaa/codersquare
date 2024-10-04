@@ -1,1 +1,2 @@
-export * from './Posts';
+export * from './nav-bar';
+export * from './post-card';
