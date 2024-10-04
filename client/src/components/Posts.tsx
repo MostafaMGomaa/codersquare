@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+
+import { Post } from '@codersquare/shared';
 import { getAllPosts } from '../api/posts';
 
 export const Posts = () => {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<Post[]>({
     queryKey: ['feed'],
     queryFn: getAllPosts,
   });
