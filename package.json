@@ -14,5 +14,8 @@
   },
   "keywords": [],
   "author": "Mostafa Gomaa <gomaamostafa26@gmail.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "react-query": "^3.39.3"
+  }
 }
