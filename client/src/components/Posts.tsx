@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 import { Post } from '@codersquare/shared';
-import { getAllPosts } from '../api/posts';
+import { getAllPosts } from '../api';
 
-export const Posts = () => {
+export const ListPosts = () => {
   const { data, error, isLoading } = useQuery<Post[]>({
     queryKey: ['feed'],
     queryFn: getAllPosts,
@@ -29,4 +30,10 @@ export const Posts = () => {
         ))}
     </div>
   );
+};
+
+export const ViewPost = () => {
+  const { id } = useParams();
+
+  return <div>Viewing Post {id}</div>;
 };
