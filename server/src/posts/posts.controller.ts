@@ -15,11 +15,11 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
 
 @Controller('posts')
-@UseGuards(AuthGuard)
 export class PostsController {
   constructor(private postsService: PostsService) {}
 
   @Get('')
+  @UseGuards(AuthGuard)
   async getUserPosts(@Req() req) {
     return await this.postsService.findPostsByUserId(req.user.id);
   }
@@ -30,11 +30,13 @@ export class PostsController {
   }
 
   @Get('/:id')
+  @UseGuards(AuthGuard)
   async getOnePostById(@Param('id') id: string) {
     return this.postsService.findPostById(id);
   }
 
   @Post('')
+  @UseGuards(AuthGuard)
   async create(@Body() data: CreatePostDto, @Req() req) {
     return await this.postsService.create({
       title: data.title,
@@ -44,6 +46,7 @@ export class PostsController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   async updateUserPost(
     @Param('id') postId: string,
     @Body() data: UpdatePostDto,

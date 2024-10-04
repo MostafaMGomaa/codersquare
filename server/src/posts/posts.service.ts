@@ -28,7 +28,7 @@ export class PostsService {
 
   async list(): Promise<Post[]> {
     return this.postsRepo.find({
-      relations: ['author'],
+      relations: ['author', 'likes', 'comments'],
       select: {
         author: {
           id: true,

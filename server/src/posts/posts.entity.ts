@@ -23,6 +23,6 @@ export class Post extends AbstractEntitiy {
   @OneToMany(() => Like, (like) => like.post)
   likes: Like[];
 
-  @OneToMany(() => Comment, (comment) => comment.postId)
+  @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 }
