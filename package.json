@@ -1,0 +1,18 @@
+{
+  "name": "codersquare",
+  "version": "1.0.0",
+  "description": "## This project inspired by [Codersqure](https://github.com/yebrahim/codersquare)",
+  "main": "",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start-server": "cd ./server && npm run start",
+    "start-server:dev": "cd ./server && npm run start:dev",
+    "start-client": "cd ./client && npm run start",
+    "start-client:dev": "cd ./client && npm run dev"
+  },
+  "keywords": [],
+  "author": "Mostafa Gomaa <gomaamostafa26@gmail.com>",
+  "license": "ISC"
+}
