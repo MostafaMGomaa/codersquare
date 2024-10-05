@@ -46,7 +46,6 @@ export const PostCard = ({ post }: { post: Post }) => {
         <span>{postedAt}</span>
       </div>
 
-      {/* Adjusted gap between different posts */}
       <hr className="my-4 border-gray-200" />
     </>
   );
