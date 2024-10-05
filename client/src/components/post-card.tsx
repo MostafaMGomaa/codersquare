@@ -1,6 +1,6 @@
 import { Post } from '@codersquare/shared';
-import { faHeart as faHeartRegualr } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSoild } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
@@ -14,16 +14,18 @@ export const PostCard = ({ post }: { post: Post }) => {
   const postedAt = '1 hour ago';
 
   return (
-    <>
-      <div className="flex items-center gap-x-2 mb-3" key={post.id}>
+    <div className="flex flex-col  mb-7 " key={post.id}>
+      <div className="flex items-center gap-x-2 mb-2">
+        {' '}
+        {/* Reduced margin from mb-3 to mb-2 */}
         <a href={postHref} className="flex items-center gap-x-2">
           <FontAwesomeIcon
-            icon={isHover ? faHeartSoild : faHeartRegualr}
+            icon={isHover ? faHeartSolid : faHeartRegular}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
             className="text-gray-400 hover:text-orange-700 transition-colors duration-450"
           />
-          <p className="font-bold text-gray-600 hover:text-orange-700 ">
+          <p className="font-bold text-gray-600 hover:text-orange-700">
             {capitalizeFirstLetter(post.title)}
           </p>
         </a>
@@ -35,19 +37,16 @@ export const PostCard = ({ post }: { post: Post }) => {
           {commentCount}
         </button>
       </div>
-
-      <div className="flex items-center mx-6 gap-x-2 gap-y-4 text-xs text-gray-400">
+      <div className="flex items-center mx-6 gap-x-2 text-xs text-gray-400">
         <span>{likesCount}</span>
         <span>|</span>
-        <a href="" className="font-semibold hover:text-orange-700">
+        <a href="#" className="font-semibold hover:text-orange-700">
           {username}
         </a>
         <span>|</span>
         <span>{postedAt}</span>
       </div>
-
-      <hr className="my-4 border-gray-200" />
-    </>
+    </div>
   );
 };
 
