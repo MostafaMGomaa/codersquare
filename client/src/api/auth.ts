@@ -1,9 +1,16 @@
 import { HOST } from '.';
-import { ServerError, SignupResponse } from '@codersquare/shared';
+import {
+  ServerError,
+  SignupResponse,
+  ENDPOINTS_CINFIGS,
+  Endpoints,
+} from '@codersquare/shared';
 
 export const signup = async (): Promise<SignupResponse | ServerError> => {
   try {
-    const response = await fetch(`${HOST}auth/signup`);
+    const response = await fetch(
+      `${HOST}${ENDPOINTS_CINFIGS[Endpoints.signup].url}`,
+    );
 
     if (!response.ok) {
       const errorData: ServerError = await response.json();

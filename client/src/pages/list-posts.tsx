@@ -20,7 +20,7 @@ export const ListPosts = () => {
 
   return (
     <div className="flex flex-col  gap-x-0.5 place-items-start justify-center container px-[1rem] py-4">
-      {data && data.map((post: Post) => <PostCard post={post} />)}
+      {data && data.map((post: Post) => <PostCard key={post.id} post={post} />)}
     </div>
   );
 };
