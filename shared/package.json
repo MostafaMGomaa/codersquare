@@ -1,11 +1,16 @@
 {
   "name": "@codersquare/shared",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "index.ts",
-  "types": "src/types.ts",
-  "scripts": {},
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "npm i && tsc"
+  },
   "keywords": [],
   "author": "Mostafa Gomaa",
   "license": "MIT",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "typescript": "^5.6.2"
+  }
 }

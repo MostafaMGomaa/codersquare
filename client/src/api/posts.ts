@@ -1,9 +1,5 @@
-import { Post } from '@codersquare/shared/src/types';
-
-const HOST =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:8000/'
-    : 'https://www.example.com/';
+import { Post } from '@codersquare/shared';
+import { HOST } from '.';
 
 export const getAllPosts = async (): Promise<Post[]> => {
   const response = await fetch(`${HOST}posts/feed`);
