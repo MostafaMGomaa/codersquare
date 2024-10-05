@@ -1,0 +1,11 @@
+{
+  "name": "@codersquare/shared",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "types": "types.ts",
+  "scripts": {},
+  "keywords": [],
+  "author": "Mostafa Gomaa",
+  "license": "MIT",
+  "description": ""
+}
