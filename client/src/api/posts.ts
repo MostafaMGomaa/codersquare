@@ -1,4 +1,4 @@
-import { Post } from '@codersquare/shared';
+import { Post } from '@codersquare/shared/src/types';
 
 const HOST =
   process.env.NODE_ENV === 'development'

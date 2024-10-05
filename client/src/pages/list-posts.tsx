@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { Post } from '@codersquare/shared';
+import { Post } from '@codersquare/shared/src/types';
 import { getAllPosts } from '../api';
 import { PostCard } from '../components';
 

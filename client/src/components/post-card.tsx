@@ -1,4 +1,4 @@
-import { Post } from '@codersquare/shared';
+import { Post } from '@codersquare/shared/src/types';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
