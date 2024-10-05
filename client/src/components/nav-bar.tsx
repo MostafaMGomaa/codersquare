@@ -10,7 +10,7 @@ export const NavBar = () => {
           Sign in
         </button>
 
-        <button className="bg-orange-700 hover:bg-orange-800 text-white text-center font-bold py-2 px-4 rounded-md transition-transform duration-300 transform hover:scale-105">
+        <button className="bg-orange-700 hover:bg-orange-800 text-white text-center font-bold py-2 px-4 rounded-md transition-transform duration-400 ">
           Sign up
         </button>
       </div>
