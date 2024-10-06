@@ -1,14 +1,36 @@
 import { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+
 import { useSignupMutation } from '../api';
 import { SignupPayload } from '../types';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const SignupForm = () => {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [hoverInput, setHoverInput] = useState<{ [key: string]: boolean }>({
+    email: false,
+    firstName: false,
+    lastName: false,
+    password: false,
+  });
+  const navigate = useNavigate();
   const signupMutation = useSignupMutation();
+
+  const handleFocus = (inputName: string) => {
+    setFocusedInput(inputName);
+  };
+
+  const handleHover = (inputName: string, isHover: boolean) => {
+    setHoverInput((prev) => ({ ...prev, [inputName]: isHover }));
+  };
+
+  const handleBlur = () => {
+    setFocusedInput(null);
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -22,21 +44,41 @@ export const SignupForm = () => {
 
     try {
       await signupMutation.mutateAsync(payloadData);
-      // TODO: Show alert
-      alert('Signup successull!');
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : 'Signup failed');
+      toast.success('Successfully Signup!');
+      setTimeout(() => {
+        navigate('/');
+      }, 10 * 100);
+    } catch (err) {
+      const error = err instanceof Error ? err.message : 'Signup failed';
+      toast.error(error || 'Signup failed', {
+        position: 'bottom-center',
+      });
     }
   };
 
-  //   const labelStyle = '';
-  //   const inputStyle = '';
+  const getInputClasses = (inputName: string) => {
+    const isFocused = focusedInput === inputName;
+    const isHovered = hoverInput[inputName] ? true : false;
+    return `border ${
+      isFocused || isHovered ? 'border-orange-700' : 'border-gray-500'
+    } 
+          rounded bg-transparent h-9 w-[20rem] transition-colors duration-300 
+          p-2 outline-none shadow-none focus:ring-0 focus:ring-transparent`;
+  };
+
+  const getLabelClasses = (inputName: string) => {
+    const isFocused = focusedInput === inputName;
+    const isHovered = hoverInput[inputName] ? true : false;
+    return `font-semibold w-40 ${
+      isFocused || isHovered ? 'text-orange-700' : 'text-gray-500'
+    }`;
+  };
 
   return (
     <div className="m-10 mt-24">
       <form className="flex flex-col gap-10" onSubmit={handleSubmit}>
         <div className="email flex">
-          <label className="text-gray-500 font-semibold w-40" htmlFor="email">
+          <label className={getLabelClasses('email')} htmlFor="email">
             Email
           </label>
           <input
@@ -44,16 +86,17 @@ export const SignupForm = () => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-500 rounded bg-transparent h-9 focus:border-orange-700 hover:border-orange-700 w-[20rem]"
+            className={getInputClasses('email')}
+            onFocus={() => handleFocus('email')}
+            onMouseEnter={() => handleHover('email', true)}
+            onMouseLeave={() => handleHover('email', false)}
+            onBlur={handleBlur}
             required
           />
         </div>
 
         <div className="firstName flex">
-          <label
-            className="text-gray-500 font-semibold w-40"
-            htmlFor="firstName"
-          >
+          <label className={getLabelClasses('firstName')} htmlFor="firstName">
             First Name
           </label>
           <input
@@ -61,16 +104,17 @@ export const SignupForm = () => {
             id="firstName"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            className="border border-gray-500 rounded bg-transparent h-9 focus:border-orange-700 hover:border-orange-700 w-[20rem]"
+            className={getInputClasses('firstName')}
+            onFocus={() => handleFocus('firstName')}
+            onMouseEnter={() => handleHover('firstName', true)}
+            onMouseLeave={() => handleHover('firstName', false)}
+            onBlur={handleBlur}
             required
           />
         </div>
 
         <div className="lastName flex">
-          <label
-            className="text-gray-500 font-semibold w-40"
-            htmlFor="lastName"
-          >
+          <label className={getLabelClasses('lastName')} htmlFor="lastName">
             Last Name
           </label>
           <input
@@ -78,16 +122,17 @@ export const SignupForm = () => {
             id="lastName"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            className="border border-gray-500 rounded bg-transparent h-9 focus:border-orange-700 hover:border-orange-700 w-[20rem]"
+            className={getInputClasses('lastName')}
+            onFocus={() => handleFocus('lastName')}
+            onMouseEnter={() => handleHover('lastName', true)}
+            onMouseLeave={() => handleHover('lastName', false)}
+            onBlur={handleBlur}
             required
           />
         </div>
 
         <div className="password flex">
-          <label
-            className="text-gray-500 font-semibold w-40"
-            htmlFor="password"
-          >
+          <label className={getLabelClasses('password')} htmlFor="password">
             Password
           </label>
           <input
@@ -95,11 +140,15 @@ export const SignupForm = () => {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border border-gray-500 rounded bg-transparent h-9 focus:border-orange-700 hover:border-orange-700 w-[20rem]"
+            className={getInputClasses('password')}
+            onFocus={() => handleFocus('password')}
+            onMouseEnter={() => handleHover('password', true)}
+            onMouseLeave={() => handleHover('password', false)}
+            onBlur={handleBlur}
             required
           />
         </div>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
         <button
           type="submit"
           disabled={signupMutation.isPending}
@@ -108,8 +157,6 @@ export const SignupForm = () => {
           {signupMutation.isPending ? 'Signing up...' : 'Sign Up'}
         </button>
       </form>
-
-      {signupMutation.isSuccess && <p>Signup successful!</p>}
     </div>
   );
 };
