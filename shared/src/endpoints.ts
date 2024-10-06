@@ -6,7 +6,7 @@ export type EndpontConfigs = {
 
 export enum EndpointsUrl {
   /** Auth */
-  signup = 'auth/singup',
+  signup = 'auth/signup',
   signin = 'auth/login',
 
   /** Posts */
