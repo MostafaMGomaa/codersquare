@@ -1,4 +1,9 @@
+import { FormEvent } from 'react';
 import LOGO from '../assets/logo.svg';
+
+const handleSignupBtn = (e: FormEvent) => {
+  e.preventDefault();
+};
 
 export const NavBar = () => {
   return (
@@ -6,13 +11,19 @@ export const NavBar = () => {
       <img src={LOGO} alt="Logo" className="h-10 w-auto" />
 
       <div className="flex auth-buttons">
-        <button className="mx-4 text-gray-500 font-semibold text-center hover:text-gray-800 transition-colors duration-300">
+        <a
+          href="/signin"
+          className="flex place-items-center mx-4 text-gray-500 font-semibold text-center hover:text-gray-800 transition-colors duration-300"
+        >
           Sign in
-        </button>
+        </a>
 
-        <button className="bg-orange-700 hover:bg-orange-800 text-white text-center font-bold py-2 px-4 rounded-md transition-transform duration-400 ">
+        <a
+          href="/signup"
+          className="bg-orange-700 hover:bg-orange-800 text-white text-center font-bold py-2 px-4 rounded-md transition-transform duration-400 "
+        >
           Sign up
-        </button>
+        </a>
       </div>
     </div>
   );
