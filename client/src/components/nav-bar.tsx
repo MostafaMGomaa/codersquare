@@ -1,9 +1,4 @@
-import { FormEvent } from 'react';
 import LOGO from '../assets/logo.svg';
-
-const handleSignupBtn = (e: FormEvent) => {
-  e.preventDefault();
-};
 
 export const NavBar = () => {
   return (
