@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 
 import { useSignupMutation } from '../api';
 import { SignupPayload } from '../types';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const SignupForm = () => {
   const [email, setEmail] = useState('');
