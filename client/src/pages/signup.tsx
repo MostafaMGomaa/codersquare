@@ -1,9 +1,10 @@
 import { FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { useSignupMutation } from '../api';
+import { FormInput } from '../components';
 import { SignupPayload } from '../types';
-import { useNavigate } from 'react-router-dom';
 
 export const SignupForm = () => {
   const [signupData, setSignupData] = useState<SignupPayload>({
@@ -33,82 +34,59 @@ export const SignupForm = () => {
     }
   };
 
-  const handleSignupDate = (inputName: string, inputValue: string) => {
+  const handleSignupData = (inputName: string, inputValue: string) => {
     setSignupData((values: SignupPayload) => ({
       ...values,
       [inputName]: inputValue,
     }));
   };
 
-  const getInputClasses = () => {
-    return `border border-gray-500 
+  const inputClasses = `border border-gray-500 
           group-hover:border-orange-700 rounded bg-transparent h-9 w-[20rem] transition-colors duration-300 
           p-2 outline-none shadow-none focus:ring-0 focus:ring-transparent group-focus-within:border-orange-700`;
-  };
-
-  const getLabelClasses = () => {
-    return `font-semibold w-40 group-hover:text-orange-700 text-gray-500 group-focus-within:text-orange-700`;
-  };
+  const labelClasses = `font-semibold w-40 group-hover:text-orange-700 text-gray-500 group-focus-within:text-orange-700`;
 
   return (
     <div className="m-10 mt-24">
       <form className="flex flex-col gap-10" onSubmit={handleSubmit}>
-        <div className="email flex group">
-          <label className={getLabelClasses()} htmlFor="email">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={signupData.email}
-            onChange={(e) => handleSignupDate('email', e.target.value)}
-            className={getInputClasses()}
-            required
-          />
-        </div>
+        <FormInput
+          label="Email"
+          type="email"
+          field="email"
+          value={signupData.email}
+          onChange={handleSignupData}
+          parentDivClasses="email"
+          inputClasses={inputClasses}
+          labelClasses={labelClasses}
+        />
 
-        <div className="firstName flex group">
-          <label className={getLabelClasses()} htmlFor="firstName">
-            First Name
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            value={signupData.firstName}
-            onChange={(e) => handleSignupDate('firstName', e.target.value)}
-            className={getInputClasses()}
-            required
-          />
-        </div>
-
-        <div className="lastName flex group">
-          <label className={getLabelClasses()} htmlFor="lastName">
-            Last Name
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            value={signupData.lastName}
-            onChange={(e) => handleSignupDate('lastName', e.target.value)}
-            className={getInputClasses()}
-            required
-          />
-        </div>
-
-        <div className="password flex group">
-          <label className={getLabelClasses()} htmlFor="password">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={signupData.password}
-            onChange={(e) => handleSignupDate('password', e.target.value)}
-            className={getInputClasses()}
-            required
-          />
-        </div>
-
+        <FormInput
+          label="First Name"
+          type="text"
+          value={signupData.firstName}
+          onChange={handleSignupData}
+          field="firstName"
+          labelClasses={labelClasses}
+          inputClasses={inputClasses}
+        />
+        <FormInput
+          label="Last Name"
+          type="text"
+          value={signupData.lastName}
+          onChange={handleSignupData}
+          field="lastName"
+          labelClasses={labelClasses}
+          inputClasses={inputClasses}
+        />
+        <FormInput
+          label="Password"
+          type="password"
+          value={signupData.password}
+          onChange={handleSignupData}
+          field="password"
+          labelClasses={labelClasses}
+          inputClasses={inputClasses}
+        />
         <button
           type="submit"
           disabled={signupMutation.isPending}
