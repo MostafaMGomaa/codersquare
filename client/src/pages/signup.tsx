@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { useSignupMutation } from '../api';
-import { FormInput } from '../components';
+import { FormButton, FormInput } from '../components';
 import { SignupPayload } from '../types';
 
 export const SignupForm = () => {
@@ -87,13 +87,12 @@ export const SignupForm = () => {
           labelClasses={labelClasses}
           inputClasses={inputClasses}
         />
-        <button
-          type="submit"
+        <FormButton
           disabled={signupMutation.isPending}
-          className="bg-orange-700 hover:bg-orange-800 text-white text-center font-bold py-2 px-4 rounded-md transition-transform duration-400 w-[6rem] ml-40"
-        >
-          {signupMutation.isPending ? 'Signing up...' : 'Sign Up'}
-        </button>
+          isPending={signupMutation.isPending}
+          pendingText="Signing up..."
+          text="Sign Up"
+        />
       </form>
     </div>
   );
