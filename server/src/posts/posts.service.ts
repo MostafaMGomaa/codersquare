@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './posts.entity';
-import { PostDto, UpdatePostDto } from './dto';
+import { PostDto, PostFeed, UpdatePostDto } from './dto';
 
 @Injectable()
 export class PostsService {
@@ -26,21 +26,24 @@ export class PostsService {
     return this.postsRepo.findBy({ authorId });
   }
 
-  async list(): Promise<Post[]> {
-    return this.postsRepo.find({
-      relations: ['author', 'likes', 'comments'],
-      select: {
-        author: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          email: true,
-        },
-      },
-      order: {
-        createdAt: 'DESC',
-      },
-    });
+  async list(): Promise<any> {
+    return this.postsRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .loadRelationCountAndMap('post.commentCount', 'post.comments')
+      .loadRelationCountAndMap('post.likeCount', 'post.likes')
+      .select([
+        'post.id',
+        'post.title',
+        'post.url',
+        'post.createdAt',
+        'author.id',
+        'author.firstName',
+        'author.lastName',
+        'author.email',
+      ])
+      .orderBy('post.createdAt', 'DESC')
+      .getMany();
   }
 
   async updatePostByPostIdAndUserId(
