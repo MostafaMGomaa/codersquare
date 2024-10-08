@@ -7,7 +7,7 @@ export type EndpontConfigs = {
 export enum EndpointsUrl {
   /** Auth */
   signup = 'auth/signup',
-  signin = 'auth/login',
+  login = 'auth/login',
 
   /** Posts */
   listPosts = 'posts/feed',
@@ -28,7 +28,7 @@ export enum EndpointsUrl {
 
 export enum Endpoints {
   /** Auth */
-  signin = 'signin',
+  login = 'login',
   signup = 'signup',
 
   /** Posts */
@@ -47,9 +47,9 @@ export enum Endpoints {
 }
 
 export const ENDPOINTS_CINFIGS = {
-  [Endpoints.signin]: {
+  [Endpoints.login]: {
     method: 'post',
-    url: EndpointsUrl.signin,
+    url: EndpointsUrl.login,
     sensitive: true,
   },
   [Endpoints.signup]: {
