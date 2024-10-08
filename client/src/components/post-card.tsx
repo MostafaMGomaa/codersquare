@@ -8,10 +8,12 @@ export const PostCard = ({ post }: { post: Post }) => {
   const [isHover, setIsHover] = useState(false);
   const postHref = `post/${post.id}`;
 
-  const commentCount = `5 comments`;
-  const likesCount = `43 likes`;
-  const username = 'mostafagomaa';
-  const postedAt = '1 hour ago';
+  const commentCount = `${post.commentCount} comments`;
+  const likesCount = `${post.likeCount} likes`;
+  const username = post.author.email.split('@')[0];
+  const postedAt = `${
+    Date.now() - new Date(post.createdAt).getTime()
+  } hours ago`;
 
   return (
     <div className="flex flex-col  mb-7 " key={post.id}>

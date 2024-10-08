@@ -7,9 +7,11 @@ export interface Post extends IAbstract {
   title: string;
   url: string;
   authorId: string;
-  Author: User;
+  author: User;
   comments?: Comment[];
   likes?: Like[];
+  commentCount: number;
+  likeCount: number;
 }
 
 export interface User extends IAbstract {
