@@ -12,4 +12,9 @@ export class LikesService {
   async create(data: LikeDto) {
     return this.likeRepo.save(data);
   }
+
+  async deleteById(id: string, authorId: string) {
+    await this.likeRepo.delete({ id, authorId });
+    return { data: { message: 'Like deleted successfully' } };
+  }
 }
