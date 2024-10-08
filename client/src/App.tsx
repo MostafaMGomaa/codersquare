@@ -7,9 +7,9 @@ import { NavBar } from './components';
 function App() {
   return (
     <>
-      <NavBar />
       <Toaster />
       <BrowserRouter>
+        <NavBar />
         <Routes>
           <Route path="/" element={<ListPosts />} />
           <Route path="/post/:id" element={<ViewPost />} />

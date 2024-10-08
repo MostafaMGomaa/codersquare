@@ -1,3 +1,3 @@
 export * from './auth';
 export * from './form-input';
-export * from './form-button';
+export * from './buttons';
