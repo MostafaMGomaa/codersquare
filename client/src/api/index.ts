@@ -1,5 +1,7 @@
 export * from './posts';
-export * from './auth/signup';
+export * from './auth';
+export * from './sendRequest';
+export * from './likes';
 
 export const HOST =
   process.env.NODE_ENV === 'development'

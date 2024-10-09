@@ -1,6 +1,6 @@
 import {
   Endpoints,
-  ENDPOINTS_CINFIGS,
+  ENDPOINTS_CONFIGS,
   LoginResponse,
   ServerError,
 } from '@codersquare/shared';
@@ -8,7 +8,7 @@ import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { LoginPayload } from '../../types';
 import { HOST } from '..';
 
-const loginEnpoint = ENDPOINTS_CINFIGS[Endpoints.login];
+const loginEnpoint = ENDPOINTS_CONFIGS[Endpoints.login];
 
 export const login = async (
   LoginPayload: LoginPayload,

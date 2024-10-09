@@ -1,9 +1,9 @@
-import { Post, ENDPOINTS_CINFIGS, Endpoints } from '@codersquare/shared';
+import { Post, ENDPOINTS_CONFIGS, Endpoints } from '@codersquare/shared';
 import { HOST } from '.';
 
 export const getAllPosts = async (): Promise<Post[]> => {
   const response = await fetch(
-    `${HOST}${ENDPOINTS_CINFIGS[Endpoints.listPosts].url}`,
+    `${HOST}${ENDPOINTS_CONFIGS[Endpoints.listPosts].url}`,
   );
 
   if (!response.ok) {

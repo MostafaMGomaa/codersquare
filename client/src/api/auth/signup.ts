@@ -4,12 +4,12 @@ import { HOST } from '..';
 import {
   ServerError,
   SignupResponse,
-  ENDPOINTS_CINFIGS,
+  ENDPOINTS_CONFIGS,
   Endpoints,
 } from '@codersquare/shared';
 import { SignupPayload } from '../../types';
 
-const signEndpoint = ENDPOINTS_CINFIGS[Endpoints.signup];
+const signEndpoint = ENDPOINTS_CONFIGS[Endpoints.signup];
 
 export const signup = async (
   signupPayload: SignupPayload,

@@ -46,7 +46,7 @@ export enum Endpoints {
   createLike = 'createLike',
 }
 
-export const ENDPOINTS_CINFIGS = {
+export const ENDPOINTS_CONFIGS = {
   [Endpoints.login]: {
     method: 'post',
     url: EndpointsUrl.login,
