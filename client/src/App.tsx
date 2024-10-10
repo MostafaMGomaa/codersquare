@@ -3,6 +3,7 @@ import { Toaster } from 'react-hot-toast';
 
 import { ListPosts, ViewPost, SignupForm, LoginForm } from './pages';
 import { NavBar } from './components';
+import { CreatePost } from './pages/posts/create-post';
 
 function App() {
   return (
@@ -11,10 +12,11 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route path="/" element={<ListPosts />} />
-          <Route path="/post/:id" element={<ViewPost />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/signin" element={<LoginForm />} />
+          <Route path="/" element={<ListPosts />} />
+          <Route path="/post/:id" element={<ViewPost />} />
+          <Route path="/post/create" element={<CreatePost />}></Route>
         </Routes>
       </BrowserRouter>
     </>

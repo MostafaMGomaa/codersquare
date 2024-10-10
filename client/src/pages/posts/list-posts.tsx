@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { Post } from '@codersquare/shared/src/types';
-import { getAllPosts } from '../api';
-import { PostCard } from '../components';
+import { getAllPosts } from '../../api';
+import { PostCard } from '../../components';
 
 export const ListPosts = () => {
   const { data, error, isLoading } = useQuery<Post[]>({
