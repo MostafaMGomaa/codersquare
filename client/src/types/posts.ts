@@ -1,6 +1,6 @@
 export interface CreatePostPayload {
   title: string;
   url: string;
-  authorId: string;
-  jwt: string;
+  authorId?: string;
+  jwt?: string;
 }

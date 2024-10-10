@@ -11,7 +11,7 @@ export const createPost = async (
   createPostPayload: CreatePostPayload,
 ): Promise<CreatePostResponse> => {
   const endpoint = ENDPOINTS_CONFIGS[Endpoints.createPost];
-  return (await SendRequest(
+  const response = await SendRequest(
     endpoint.url,
     endpoint.method,
     {
@@ -22,7 +22,9 @@ export const createPost = async (
       title: createPostPayload.title,
       url: createPostPayload.url,
     }),
-  )) as CreatePostResponse;
+  );
+
+  return response as CreatePostResponse;
 };
 
 export const useCreatePostMutation = (): UseMutationResult<

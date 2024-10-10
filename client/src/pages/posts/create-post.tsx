@@ -1,17 +1,44 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { FormButton, FormInput } from '../../components';
 import { CreatePostPayload } from '../../types/posts';
+import { useCreatePostMutation } from '../../api';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export const CreatePost = () => {
-  const [postData, setPostData] = useState<Partial<CreatePostPayload>>({
+  const [postData, setPostData] = useState<CreatePostPayload>({
     title: '',
     url: '',
+    jwt: localStorage.getItem('jwt') as string,
   });
+  const createPostMutation = useCreatePostMutation();
+  const navigate = useNavigate();
+
   const handleCreatePostData = (inputName: string, value: string) => {
-    setPostData((values: Partial<CreatePostPayload>) => ({
+    setPostData((values: CreatePostPayload) => ({
       ...values,
       [inputName]: value,
     }));
+  };
+
+  const handleFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await createPostMutation.mutateAsync(postData);
+
+      toast.success('Successfully creating a new post');
+      setTimeout(() => {
+        navigate('/');
+      }, 10 * 100);
+    } catch (err) {
+      const error =
+        err instanceof Error ? err.message : 'Failed to create post';
+
+      toast.error(error, {
+        position: 'bottom-right',
+      });
+    }
   };
 
   const inputClasses = `border border-gray-500 
@@ -21,7 +48,7 @@ export const CreatePost = () => {
 
   return (
     <div className="m-10 mt-24">
-      <form className="flex flex-col gap-5">
+      <form className="flex flex-col gap-5" onSubmit={handleFormSubmit}>
         <FormInput
           type="text"
           label="Title"
@@ -42,7 +69,12 @@ export const CreatePost = () => {
           onChange={handleCreatePostData}
           inputClasses={inputClasses}
         />
-        <FormButton text="Submit" />
+        <FormButton
+          text="Submit"
+          disabled={createPostMutation.isPending}
+          isPending={createPostMutation.isPending}
+          pendingText="Creating new post..."
+        />
       </form>
     </div>
   );
