@@ -52,7 +52,6 @@ export const LoginForm = () => {
           inputClasses={inputClasses}
           labelClasses={labelClasses}
         />
-
         <FormInput
           label="Password"
           type="password"

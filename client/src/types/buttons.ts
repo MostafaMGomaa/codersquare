@@ -6,6 +6,7 @@ export interface FormButtonProps {
   classes?: string;
   isPending?: boolean;
   pendingText?: string;
+  handleOnClick?: (e: FormEvent) => void;
 }
 
 export interface ShadowButtonProps {

@@ -8,6 +8,7 @@ export const FormButton: React.FC<FormButtonProps> = ({
   isPending = false,
   pendingText = text,
   classes = '',
+  handleOnClick,
 }) => {
   return (
     <button
@@ -18,6 +19,7 @@ export const FormButton: React.FC<FormButtonProps> = ({
         transition-transform duration-400 w-[6rem] ml-40 `,
         classes,
       )}
+      onClick={handleOnClick}
     >
       {isPending ? pendingText : text}
     </button>

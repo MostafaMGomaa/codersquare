@@ -1,5 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import LOGO from '../assets/logo.svg';
 import { FormButton } from './form-button';
 import { ShadowButton } from './shadow-button';
@@ -7,7 +7,7 @@ import { JWTPayload } from '../types';
 import { FormEvent } from 'react';
 
 export const NavBar = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const jwt = localStorage.getItem('jwt') || '';
   let username = '';
 
@@ -19,7 +19,12 @@ export const NavBar = () => {
   const handleSignoutOnChange = (e: FormEvent) => {
     e.preventDefault();
     localStorage.removeItem('jwt');
-    navigate('/'); // Navigate to the home page after signing out
+    navigate('/');
+  };
+
+  const handleCreatePostButton = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/post/create');
   };
 
   return (
@@ -32,6 +37,7 @@ export const NavBar = () => {
             text="New Post"
             pendingText="New Post"
             classes="text-sm"
+            handleOnClick={handleCreatePostButton}
           />
 
           <ShadowButton text={`${username} (9)`} />
