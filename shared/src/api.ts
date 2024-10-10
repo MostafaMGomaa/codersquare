@@ -1,4 +1,4 @@
-import { Like } from './types';
+import { Like, Post } from './types';
 
 export interface SignupResponse {
   data: {
@@ -9,3 +9,5 @@ export interface SignupResponse {
 export interface LoginResponse extends SignupResponse {}
 
 export interface CreateLikeResponse extends Like {}
+
+export interface CreatePostResponse extends Post {}

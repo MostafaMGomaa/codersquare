@@ -1,22 +1,41 @@
-import { Endpoints, ENDPOINTS_CONFIGS } from '@codersquare/shared';
+import {
+  CreatePostResponse,
+  Endpoints,
+  ENDPOINTS_CONFIGS,
+} from '@codersquare/shared';
 import { SendRequest } from '../sendRequest';
 import { CreatePostPayload } from '../../types/posts';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 
 export const createPost = async (
   createPostPayload: CreatePostPayload,
-  jwt: string,
-) => {
+): Promise<CreatePostResponse> => {
   const endpoint = ENDPOINTS_CONFIGS[Endpoints.createPost];
-  (await SendRequest(
+  return (await SendRequest(
     endpoint.url,
     endpoint.method,
     {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwt}`,
+      Authorization: `Bearer ${createPostPayload.jwt}`,
     },
     JSON.stringify({
       title: createPostPayload.title,
       url: createPostPayload.url,
     }),
-  )) as CreatePostPayload;
+  )) as CreatePostResponse;
+};
+
+export const useCreatePostMutation = (): UseMutationResult<
+  CreatePostResponse,
+  Error,
+  CreatePostPayload
+> => {
+  return useMutation<CreatePostResponse, Error, CreatePostPayload>({
+    mutationFn: (createPostPayload: CreatePostPayload) =>
+      createPost(createPostPayload),
+    onError: (error: Error) => {
+      console.error(error);
+      return `error ${error}`;
+    },
+  });
 };
