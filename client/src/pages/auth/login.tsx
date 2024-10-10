@@ -2,9 +2,9 @@ import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-import { FormButton, FormInput } from '../components';
-import { useLoginMutation } from '../api/auth';
-import { LoginPayload } from '../types';
+import { FormButton, FormInput } from '../../components';
+import { useLoginMutation } from '../../api/auth';
+import { LoginPayload } from '../../types';
 
 export const LoginForm = () => {
   const [loginData, setLoginData] = useState<LoginPayload>({

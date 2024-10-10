@@ -2,9 +2,9 @@ import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-import { useSignupMutation } from '../api';
-import { FormButton, FormInput } from '../components';
-import { SignupPayload } from '../types';
+import { useSignupMutation } from '../../api';
+import { FormButton, FormInput } from '../../components';
+import { SignupPayload } from '../../types';
 
 export const SignupForm = () => {
   const [signupData, setSignupData] = useState<SignupPayload>({

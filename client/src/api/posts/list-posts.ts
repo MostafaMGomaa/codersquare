@@ -1,5 +1,5 @@
 import { Post, ENDPOINTS_CONFIGS, Endpoints } from '@codersquare/shared';
-import { HOST } from '.';
+import { HOST } from '../';
 
 export const getAllPosts = async (): Promise<Post[]> => {
   const response = await fetch(

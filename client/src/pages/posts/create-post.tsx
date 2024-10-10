@@ -3,12 +3,12 @@ import { FormButton, FormInput } from '../../components';
 import { CreatePostPayload } from '../../types/posts';
 
 export const CreatePost = () => {
-  const [postData, setPostData] = useState<CreatePostPayload>({
+  const [postData, setPostData] = useState<Partial<CreatePostPayload>>({
     title: '',
     url: '',
   });
   const handleCreatePostData = (inputName: string, value: string) => {
-    setPostData((values: CreatePostPayload) => ({
+    setPostData((values: Partial<CreatePostPayload>) => ({
       ...values,
       [inputName]: value,
     }));
@@ -27,7 +27,7 @@ export const CreatePost = () => {
           label="Title"
           field="title"
           parentDivClasses="title"
-          value={postData.title}
+          value={postData.title!}
           labelClasses={labelClasses}
           onChange={handleCreatePostData}
           inputClasses={inputClasses}
@@ -37,7 +37,7 @@ export const CreatePost = () => {
           label="URL"
           field="url"
           parentDivClasses="text"
-          value={postData.url}
+          value={postData.url!}
           labelClasses={labelClasses}
           onChange={handleCreatePostData}
           inputClasses={inputClasses}
