@@ -7,20 +7,23 @@ import {
 import { CreateLikePayload } from '../../types/likes';
 import { SendRequest } from '../sendRequest';
 
-const createEndpoint = ENDPOINTS_CONFIGS[Endpoints.createLike];
+const createLikeEndpoint = ENDPOINTS_CONFIGS[Endpoints.createLike];
 
 export const createLike = async (
   createLikePayload: CreateLikePayload,
 ): Promise<CreateLikeResponse> => {
   try {
+    const endpointWithParam = createLikeEndpoint.url.replace(
+      ':postId',
+      createLikePayload.postId,
+    );
     const response = await SendRequest(
-      createEndpoint.url,
-      createEndpoint.method,
+      endpointWithParam,
+      createLikeEndpoint.method,
       {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${createLikePayload.jwt}`,
       },
-      JSON.stringify(createLikePayload),
     );
 
     return response as CreateLikeResponse;
@@ -38,7 +41,6 @@ export const useCreateLikeMutation = (): UseMutationResult<
   return useMutation<CreateLikeResponse, Error, CreateLikePayload>({
     mutationFn: (createLikePayload: CreateLikePayload) =>
       createLike(createLikePayload),
-    onSuccess: () => {},
     onError: (error: Error) => {
       console.error(error);
       return `error ${error}`;

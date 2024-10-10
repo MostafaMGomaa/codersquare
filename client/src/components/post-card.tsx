@@ -1,17 +1,42 @@
-import { Post } from '@codersquare/shared/src/types';
+import { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { Post } from '@codersquare/shared/src/types';
+
+import { useCreateLikeMutation } from '../api';
+import { CreateLikePayload } from '../types/likes';
 
 export const PostCard = ({ post }: { post: Post }) => {
   const [isHover, setIsHover] = useState(false);
-  const postHref = `post/${post.id}`;
+  const [likesCount, setLikesCount] = useState<number>(post.likeCount);
 
   const commentCount = `${post.commentCount} comments`;
-  const likesCount = `${post.likeCount} likes`;
-  const username = post.author.email.split('@')[0];
 
+  const createLikeMutation = useCreateLikeMutation();
+
+  const handleLikeButton = async (e: FormEvent) => {
+    e.preventDefault();
+    // Increase like counter
+    setLikesCount(likesCount + 1);
+
+    // send request to the server
+    const createLikePayload: CreateLikePayload = {
+      postId: post.id,
+      jwt: localStorage.getItem('jwt') as string,
+    };
+    await createLikeMutation.mutateAsync(createLikePayload);
+    try {
+    } catch (err) {
+      const error =
+        err instanceof Error ? err.message : 'Error while creating like';
+      toast.error(error, {
+        position: 'bottom-right',
+      });
+      setLikesCount(likesCount - 1);
+    }
+  };
   function getTimeAgo(createdAt: Date): string {
     const now = Date.now();
     const postTime = new Date(createdAt).getTime();
@@ -36,14 +61,13 @@ export const PostCard = ({ post }: { post: Post }) => {
   return (
     <div className="flex flex-col  mb-7 " key={post.id}>
       <div className="flex items-center gap-x-2 mb-2">
-        {' '}
-        {/* Reduced margin from mb-3 to mb-2 */}
-        <a href={postHref} className="flex items-center gap-x-2">
+        <a href={`post/${post.id}`} className="flex items-center gap-x-2">
           <FontAwesomeIcon
             icon={isHover ? faHeartSolid : faHeartRegular}
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
-            className="text-gray-400 hover:text-orange-700 transition-colors duration-450"
+            onClick={handleLikeButton}
+            className="like-btn text-gray-400 hover:text-orange-700 transition-colors duration-450"
           />
           <p className="font-bold text-gray-600 hover:text-orange-700">
             {capitalizeFirstLetter(post.title)}
@@ -58,10 +82,10 @@ export const PostCard = ({ post }: { post: Post }) => {
         </button>
       </div>
       <div className="flex items-center mx-6 gap-x-2 text-xs text-gray-400">
-        <span>{likesCount}</span>
+        <span>{`${likesCount} likes`}</span>
         <span>|</span>
         <a href="#" className="font-semibold hover:text-orange-700">
-          {username}
+          {post.author.email.split('@')[0]}
         </a>
         <span>|</span>
         <span>{getTimeAgo(post.createdAt)}</span>
