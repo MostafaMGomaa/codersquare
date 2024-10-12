@@ -16,7 +16,20 @@ export class CommnetsService {
   }
 
   async findAllByPostId(postId: string): Promise<CommentDto[]> {
-    return this.commentRepo.findBy({ postId });
+    return this.commentRepo
+      .createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.author', 'author')
+      .where('comment.postId = :postId', { postId })
+      .select([
+        'comment.id',
+        'comment.comment',
+        'comment.createdAt',
+        'author.id',
+        'author.firstName',
+        'author.lastName',
+        'author.email',
+      ])
+      .getMany();
   }
 
   async delete(id: string, authorId: string): Promise<boolean> {

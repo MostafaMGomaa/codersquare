@@ -22,6 +22,7 @@ export class PostsService {
     return this.postsRepo
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
+      .loadRelationCountAndMap('post.likeCount', 'post.likes')
       .where('post.id = :id', { id })
       .select([
         'post.id',
@@ -40,6 +41,7 @@ export class PostsService {
     return this.postsRepo
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
+      .loadRelationCountAndMap('post.likesCount', 'post.likes')
       .where('post.authorId = :authorId', { authorId })
       .getMany();
   }

@@ -26,8 +26,6 @@ export const ViewPost = () => {
       }),
   });
 
-  console.log({ postData });
-
   /// Get post comments.
   const {
     data: commentsData,
@@ -37,7 +35,6 @@ export const ViewPost = () => {
     queryKey: ['comments', id],
     queryFn: () => listPostComments(listPostCommentsPayload),
   });
-
   if (postLoading || commentsLoading) return <div>Loading...</div>;
   if (postError || commentsError)
     return <div>Error: {postError?.message || commentsError?.message}</div>;
