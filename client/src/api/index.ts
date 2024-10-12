@@ -3,6 +3,7 @@ export * from './auth';
 export * from './sendRequest';
 export * from './likes';
 export * from './comments';
+export * from './users';
 
 export const HOST =
   process.env.NODE_ENV === 'development'

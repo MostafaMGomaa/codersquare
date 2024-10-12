@@ -40,7 +40,7 @@ export const NavBar = () => {
             handleOnClick={handleCreatePostButton}
           />
 
-          <ShadowButton text={`${username} (9)`} />
+          <ShadowButton text={`${username} (9)`} href="/me" />
 
           <ShadowButton text="Sign out" onClick={handleSignoutOnChange} />
         </div>

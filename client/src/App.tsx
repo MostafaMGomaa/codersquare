@@ -1,7 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
-import { ListPosts, ViewPost, SignupForm, LoginForm } from './pages';
+import {
+  ListPosts,
+  ViewPost,
+  SignupForm,
+  LoginForm,
+  UserProfile,
+} from './pages';
 import { NavBar } from './components';
 import { CreatePost } from './pages/posts/create-post';
 
@@ -17,6 +23,7 @@ function App() {
           <Route path="/" element={<ListPosts />} />
           <Route path="/post/:id" element={<ViewPost />} />
           <Route path="/post/create" element={<CreatePost />}></Route>
+          <Route path="/me" element={<UserProfile />}></Route>
         </Routes>
       </BrowserRouter>
     </>

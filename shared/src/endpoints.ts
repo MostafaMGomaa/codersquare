@@ -24,6 +24,10 @@ export enum EndpointsUrl {
 
   /** Likes */
   createLike = 'likes/:postId',
+
+  /** Users */
+  getMe = 'users/me',
+  getUser = 'users/:id',
 }
 
 export enum Endpoints {
@@ -44,6 +48,10 @@ export enum Endpoints {
 
   /** Likes */
   createLike = 'createLike',
+
+  /** User */
+  getMe = 'getMe',
+  getUser = 'getUser',
 }
 
 export const ENDPOINTS_CONFIGS = {
@@ -92,6 +100,18 @@ export const ENDPOINTS_CONFIGS = {
   [Endpoints.createLike]: {
     method: 'post',
     url: EndpointsUrl.createLike,
+    auth: true,
+  },
+
+  /** User */
+  [Endpoints.getMe]: {
+    method: 'get',
+    url: EndpointsUrl.getMe,
+    auth: true,
+  },
+  [Endpoints.getUser]: {
+    method: 'get',
+    url: EndpointsUrl.getUser,
     auth: true,
   },
 };
