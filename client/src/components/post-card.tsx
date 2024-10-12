@@ -58,7 +58,7 @@ export const PostCard = ({
   return (
     <div className={parentDivClasses} key={post.id}>
       <div className="top-layer flex items-center gap-x-2 mb-2">
-        <a href={`post/${post.id}`} className="flex items-center gap-x-2">
+        <a href={`/post/${post.id}`} className="flex items-center gap-x-2">
           <FontAwesomeIcon
             icon={isHover ? faHeartSolid : faHeartRegular}
             onMouseEnter={() => setIsHover(true)}
