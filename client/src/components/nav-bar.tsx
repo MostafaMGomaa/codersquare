@@ -1,10 +1,10 @@
-import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
-import LOGO from '../assets/logo.svg';
-import { FormButton } from './form-button';
-import { ShadowButton } from './shadow-button';
-import { JWTPayload } from '../types';
 import { FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+
+import { FormButton, ShadowButton } from './buttons';
+import { JWTPayload } from '../types';
+import LOGO from '../assets/logo.svg';
 
 export const NavBar = () => {
   const navigate = useNavigate();

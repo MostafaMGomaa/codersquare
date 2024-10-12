@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { ShadowButtonProps } from '../types';
+import { ShadowButtonProps } from '../../types';
 
 export const ShadowButton: React.FC<ShadowButtonProps> = ({
   text,

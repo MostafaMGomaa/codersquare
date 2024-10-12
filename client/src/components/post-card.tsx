@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { twMerge } from 'tailwind-merge';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +9,6 @@ import { Post } from '@codersquare/shared/src/types';
 import { useCreateLikeMutation } from '../api';
 import { CreateLikePayload } from '../types';
 import { getTimeAgo } from '../utils';
-import { twMerge } from 'tailwind-merge';
 
 export const PostCard = ({
   post,

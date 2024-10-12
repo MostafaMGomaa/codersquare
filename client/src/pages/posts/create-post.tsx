@@ -1,9 +1,10 @@
 import { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 import { FormButton, FormInput } from '../../components';
 import { CreatePostPayload } from '../../types/posts';
 import { useCreatePostMutation } from '../../api';
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 
 export const CreatePost = () => {
   const [postData, setPostData] = useState<CreatePostPayload>({

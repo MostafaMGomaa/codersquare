@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Post, Comment } from '@codersquare/shared';
+import { PostCard, CommentCard, AddButton } from '../../components';
 import { getOnePost, listPostComments } from '../../api';
 import { ListPostCommentsPayload } from '../../types';
-import { PostCard, CommentCard } from '../../components';
 
 export const ViewPost = () => {
   const { id } = useParams();
@@ -42,9 +42,12 @@ export const ViewPost = () => {
   return (
     <>
       <PostCard post={postData!} buttonClasses="hidden" divClasses="m-10" />
+
       {commentsData?.map((comment: Comment) => (
         <CommentCard comment={comment} key={comment.id} />
       ))}
+
+      <AddButton />
     </>
   );
 };
