@@ -19,11 +19,29 @@ export class PostsService {
   }
 
   async findPostById(id: string): Promise<Post> {
-    return this.postsRepo.findOneBy({ id });
+    return this.postsRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .where('post.id = :id', { id })
+      .select([
+        'post.id',
+        'post.title',
+        'post.url',
+        'post.createdAt',
+        'author.id',
+        'author.firstName',
+        'author.lastName',
+        'author.email',
+      ])
+      .getOne();
   }
 
   async findPostsByUserId(authorId: string): Promise<Post[]> {
-    return this.postsRepo.findBy({ authorId });
+    return this.postsRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .where('post.authorId = :authorId', { authorId })
+      .getMany();
   }
 
   async list(): Promise<any> {

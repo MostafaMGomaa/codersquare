@@ -26,6 +26,8 @@ export const ViewPost = () => {
       }),
   });
 
+  console.log({ postData });
+
   /// Get post comments.
   const {
     data: commentsData,
