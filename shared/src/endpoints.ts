@@ -19,7 +19,7 @@ export enum EndpointsUrl {
 
   /** Comments */
   createComments = 'commnets/:postId',
-  getPostComments = 'comments/:id',
+  listPostComments = 'comments/:id',
   deleteComment = 'comments/:id',
 
   /** Likes */
@@ -75,6 +75,11 @@ export const ENDPOINTS_CONFIGS = {
   [Endpoints.createComment]: {
     method: 'post',
     url: EndpointsUrl.createComments,
+    auth: true,
+  },
+  [Endpoints.listPostComments]: {
+    method: 'get',
+    url: EndpointsUrl.listPostComments,
     auth: true,
   },
   [Endpoints.deleteComment]: {
