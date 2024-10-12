@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Post, Comment } from '@codersquare/shared';
 import { getOnePost, listPostComments } from '../../api';
 import { ListPostCommentsPayload } from '../../types';
-import { PostCard } from '../../components';
-import { CommentCard } from '../../components/comment-card';
+import { PostCard, CommentCard } from '../../components';
 
 export const ViewPost = () => {
   const { id } = useParams();
@@ -41,8 +40,11 @@ export const ViewPost = () => {
     return <div>Error: {postError?.message || commentsError?.message}</div>;
 
   return (
-    <div>
+    <>
       <PostCard post={postData!} buttonClasses="hidden" divClasses="m-10" />
-    </div>
+      {commentsData?.map((comment: Comment) => (
+        <CommentCard comment={comment} key={comment.id} />
+      ))}
+    </>
   );
 };
