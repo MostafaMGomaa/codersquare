@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Post, Comment } from '@codersquare/shared';
 import { getOnePost, listPostComments } from '../../api';
 import { ListPostCommentsPayload } from '../../types';
+import { PostCard } from '../../components';
 
 export const ViewPost = () => {
   const { id } = useParams();
@@ -16,9 +17,13 @@ export const ViewPost = () => {
     data: postData,
     error: postError,
     isLoading: postLoading,
-  } = useQuery<Post>({
+  } = useQuery<Post | undefined>({
     queryKey: ['post', id],
-    queryFn: () => getOnePost(id!),
+    queryFn: () =>
+      getOnePost({
+        id: id!,
+        jwt: localStorage.getItem('jwt') as string,
+      }),
   });
 
   /// Get post comments.
@@ -35,5 +40,9 @@ export const ViewPost = () => {
   if (postError || commentsError)
     return <div>Error: {postError?.message || commentsError?.message}</div>;
 
-  return <div>Viewing Post {id}</div>;
+  return (
+    <div>
+      <PostCard post={postData!} />
+    </div>
+  );
 };

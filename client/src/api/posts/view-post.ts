@@ -1,16 +1,15 @@
 import { Post, ENDPOINTS_CONFIGS, Endpoints } from '@codersquare/shared';
-import { HOST } from '../';
+import { ViewPostPayload } from '../../types/posts';
+import { SendRequest } from '../sendRequest';
 
-const getPostEndpoint = ENDPOINTS_CONFIGS[Endpoints.getOnePost];
+const endpoint = ENDPOINTS_CONFIGS[Endpoints.getOnePost];
 
-export const getOnePost = async (id: string): Promise<Post> => {
-  const endpoint = getPostEndpoint.url.replace(':id', id);
-  const response = await fetch(`${HOST}${endpoint}`);
-
-  if (!response.ok) {
-    const { error } = await response.json();
-    throw new Error(error || 'Error fetching the post');
-  }
-
-  return response.json();
+export const getOnePost = async (
+  payload: ViewPostPayload,
+): Promise<Post | undefined> => {
+  const urlWithParam = endpoint.url.replace(':id', payload.id);
+  return (await SendRequest(urlWithParam, endpoint.method, {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${payload.jwt}`,
+  })) as Post | undefined;
 };

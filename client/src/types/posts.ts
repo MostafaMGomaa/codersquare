@@ -4,3 +4,8 @@ export interface CreatePostPayload {
   authorId?: string;
   jwt?: string;
 }
+
+export interface ViewPostPayload {
+  jwt: string;
+  id: string;
+}
