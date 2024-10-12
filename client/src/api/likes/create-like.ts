@@ -28,8 +28,11 @@ export const createLike = async (
 
     return response as CreateLikeResponse;
   } catch (err) {
-    const error = err instanceof Error ? err.message : 'Signup failed';
-    throw new Error(error || 'Error occurred during creating like');
+    const error =
+      err instanceof Error
+        ? err.message
+        : 'Error occurred during creating like';
+    throw new Error(error);
   }
 };
 

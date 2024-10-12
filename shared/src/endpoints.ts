@@ -18,7 +18,7 @@ export enum EndpointsUrl {
   deletePost = 'posts/:id',
 
   /** Comments */
-  createComments = 'commnets/:postId',
+  createComments = 'comments/:postId',
   listPostComments = 'comments/:id',
   deleteComment = 'comments/:id',
 

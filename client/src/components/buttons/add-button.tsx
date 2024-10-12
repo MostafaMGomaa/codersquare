@@ -1,10 +1,54 @@
+import { ChangeEvent, FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useQueryClient } from '@tanstack/react-query'; // Import this
 import { FormButton } from './form-button';
-import { useState } from 'react';
+import { createCommentMutation } from '../../api';
+import { CreateCommentPayload } from '../../types';
 
-export const AddButton = () => {
+export const AddButton = ({ postId }: { postId: string }) => {
+  const [commentData, setCommentData] = useState<CreateCommentPayload>({
+    comment: '',
+    postId,
+    jwt: localStorage.getItem('jwt') as string,
+  });
   const [activeAddBtn, setActiveButton] = useState(false);
+
+  const queryClient = useQueryClient(); // Get queryClient from useQueryClient
+  const mutation = createCommentMutation();
+
+  const handleCreateCommentData = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+
+    setCommentData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleFormSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      await mutation.mutateAsync(commentData, {
+        onSuccess: () => {
+          toast.success('Successfully created a new comment');
+          setActiveButton(false);
+
+          queryClient.invalidateQueries({
+            queryKey: ['comments', postId],
+          });
+        },
+      });
+    } catch (err) {
+      const error =
+        err instanceof Error ? err.message : 'Failed to create comment';
+      toast.error(error, {
+        position: 'bottom-right',
+      });
+    }
+  };
 
   return (
     <>
@@ -19,7 +63,10 @@ export const AddButton = () => {
       </button>
 
       {activeAddBtn && (
-        <form className="fixed bottom-10 right-10 w-[22rem] max-w-[90vw] h-[25rem] p-4 flex flex-col bg-white shadow-lg border border-gray-300 rounded-lg">
+        <form
+          className="fixed bottom-10 right-10 w-[22rem] max-w-[90vw] h-[25rem] p-4 flex flex-col bg-white shadow-lg border border-gray-300 rounded-lg"
+          onSubmit={handleFormSubmit}
+        >
           <button
             type="button"
             className="absolute top-0 right-1 p-1 text-gray-500 hover:text-gray-700 transition-colors duration-300 "
@@ -38,6 +85,8 @@ export const AddButton = () => {
             autoFocus
             onFocus={(e) => e.target.setSelectionRange(0, 0)}
             placeholder="Write your comment here..."
+            onChange={handleCreateCommentData}
+            required
           />
 
           <FormButton text="Submit" classes="m-4 self-end" />

@@ -6,11 +6,15 @@ import { getOnePost, listPostComments } from '../../api';
 import { ListPostCommentsPayload } from '../../types';
 
 export const ViewPost = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id?: string }>();
+
+  if (!id) {
+    return <div>Error: Post ID is missing.</div>;
+  }
 
   const listPostCommentsPayload: ListPostCommentsPayload = {
     jwt: localStorage.getItem('jwt') as string,
-    postId: id as string,
+    postId: id,
   };
 
   const {
@@ -21,12 +25,11 @@ export const ViewPost = () => {
     queryKey: ['post', id],
     queryFn: () =>
       getOnePost({
-        id: id!,
+        id,
         jwt: localStorage.getItem('jwt') as string,
       }),
   });
 
-  /// Get post comments.
   const {
     data: commentsData,
     error: commentsError,
@@ -35,9 +38,15 @@ export const ViewPost = () => {
     queryKey: ['comments', id],
     queryFn: () => listPostComments(listPostCommentsPayload),
   });
+
   if (postLoading || commentsLoading) return <div>Loading...</div>;
   if (postError || commentsError)
-    return <div>Error: {postError?.message || commentsError?.message}</div>;
+    return (
+      <div>
+        Error:{' '}
+        {postError?.message || commentsError?.message || 'An error occurred.'}
+      </div>
+    );
 
   return (
     <>
@@ -47,7 +56,7 @@ export const ViewPost = () => {
         <CommentCard comment={comment} key={comment.id} />
       ))}
 
-      <AddButton />
+      <AddButton postId={id} />
     </>
   );
 };
