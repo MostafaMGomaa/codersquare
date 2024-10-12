@@ -9,6 +9,7 @@ import { Post } from '@codersquare/shared/src/types';
 import { useCreateLikeMutation } from '../api';
 import { CreateLikePayload } from '../types';
 import { getTimeAgo } from '../utils';
+import { useNavigate } from 'react-router-dom';
 
 export const PostCard = ({
   post,
@@ -22,9 +23,15 @@ export const PostCard = ({
   const [isHover, setIsHover] = useState(false);
   const [likesCount, setLikesCount] = useState<number>(post.likeCount);
 
+  const navigate = useNavigate();
   const commentCount = `${post.commentCount} comments`;
-
   const createLikeMutation = useCreateLikeMutation();
+  const commentClasses = twMerge(
+    `px-6 py-[1px] ml-5 border border-gray-400 text-gray-400 rounded-md text-center text-sm
+          hover:bg-orange-700 hover:border-transparent hover:text-white`,
+    buttonClasses,
+  );
+  const parentDivClasses = twMerge('flex flex-col mb-7', divClasses);
 
   const handleLikeButton = async (e: FormEvent) => {
     e.preventDefault();
@@ -47,13 +54,9 @@ export const PostCard = ({
       setLikesCount(likesCount - 1);
     }
   };
-
-  const commentClasses = twMerge(
-    `px-6 py-[1px] ml-5 border border-gray-400 text-gray-400 rounded-md text-center text-sm
-          hover:bg-orange-700 hover:border-transparent hover:text-white`,
-    buttonClasses,
-  );
-  const parentDivClasses = twMerge('flex flex-col mb-7', divClasses);
+  const handleCommentButton = () => {
+    navigate(`/post/${post.id}`);
+  };
 
   return (
     <div className={parentDivClasses} key={post.id}>
@@ -71,7 +74,9 @@ export const PostCard = ({
           </p>
         </a>
         <span className="text-gray-400"> ({shortenUrl(post.url)})</span>
-        <button className={commentClasses}>{commentCount}</button>
+        <button className={commentClasses} onClick={handleCommentButton}>
+          {commentCount}
+        </button>
       </div>
 
       <div className="flex items-center mx-6 gap-x-2 text-xs text-gray-400">
