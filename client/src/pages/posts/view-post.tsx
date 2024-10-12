@@ -4,6 +4,7 @@ import { Post, Comment } from '@codersquare/shared';
 import { getOnePost, listPostComments } from '../../api';
 import { ListPostCommentsPayload } from '../../types';
 import { PostCard } from '../../components';
+import { CommentCard } from '../../components/comment-card';
 
 export const ViewPost = () => {
   const { id } = useParams();
@@ -41,7 +42,7 @@ export const ViewPost = () => {
 
   return (
     <div>
-      <PostCard post={postData!} />
+      <PostCard post={postData!} buttonClasses="hidden" divClasses="m-10" />
     </div>
   );
 };

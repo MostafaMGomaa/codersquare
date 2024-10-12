@@ -53,7 +53,7 @@ export const PostCard = ({
           hover:bg-orange-700 hover:border-transparent hover:text-white`,
     buttonClasses,
   );
-  const parentDivClasses = twMerge('flex flex-col  mb-7', divClasses);
+  const parentDivClasses = twMerge('flex flex-col mb-7', divClasses);
 
   return (
     <div className={parentDivClasses} key={post.id}>
@@ -66,7 +66,7 @@ export const PostCard = ({
             onClick={handleLikeButton}
             className="like-btn text-gray-400 hover:text-orange-700 transition-colors duration-450"
           />
-          <p className="font-bold text-gray-600 hover:text-orange-700 w-64 text-xl">
+          <p className="font-bold text-gray-600 hover:text-orange-700 text-xl">
             {capitalizeFirstLetter(post.title)}
           </p>
         </a>
