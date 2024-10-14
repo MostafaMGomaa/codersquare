@@ -5,9 +5,9 @@ import { getAllPosts } from '../../api';
 import { PostCard } from '../../components';
 
 export const ListPosts = () => {
-  const { data, error, isLoading } = useQuery<Post[]>({
+  const { data, error, isLoading, refetch } = useQuery<Post[]>({
     queryKey: ['feed'],
-    queryFn: getAllPosts,
+    queryFn: () => getAllPosts(localStorage.getItem('jwt') as string),
   });
 
   if (isLoading) {
@@ -20,7 +20,10 @@ export const ListPosts = () => {
 
   return (
     <div className="flex flex-col  gap-x-0.5 place-items-start justify-center container px-[1rem] py-4">
-      {data && data.map((post: Post) => <PostCard key={post.id} post={post} />)}
+      {data &&
+        data.map((post: Post) => (
+          <PostCard key={post.id} post={post} refetch={refetch} />
+        ))}
     </div>
   );
 };

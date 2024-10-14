@@ -12,6 +12,7 @@ export interface Post extends IAbstract {
   likes?: Like[];
   commentCount: number;
   likeCount: number;
+  likedByUserBefore: boolean;
 }
 
 export interface User extends IAbstract {

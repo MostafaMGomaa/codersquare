@@ -4,6 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { QueryObserverResult } from '@tanstack/react-query';
 import { Post } from '@codersquare/shared/src/types';
 
 import { useCreateLikeMutation } from '../api';
@@ -15,10 +16,12 @@ export const PostCard = ({
   post,
   buttonClasses,
   divClasses,
+  refetch,
 }: {
   post: Post;
   buttonClasses?: string;
   divClasses?: string;
+  refetch: any;
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [likesCount, setLikesCount] = useState<number>(post.likeCount);
@@ -33,6 +36,14 @@ export const PostCard = ({
   );
   const parentDivClasses = twMerge('flex flex-col mb-7', divClasses);
 
+  const getLikeButtonClasses = () => {
+    const defaultClasses =
+      'like-btn text-gray-400 hover:text-orange-700 transition-colors duration-450';
+    return post.likedByUserBefore
+      ? twMerge(defaultClasses, 'text-orange-700')
+      : defaultClasses;
+  };
+
   const handleLikeButton = async (e: FormEvent) => {
     e.preventDefault();
     // Increase like counter
@@ -44,6 +55,7 @@ export const PostCard = ({
       jwt: localStorage.getItem('jwt') as string,
     };
     await createLikeMutation.mutateAsync(createLikePayload);
+    await refetch();
     try {
     } catch (err) {
       const error =
@@ -63,11 +75,13 @@ export const PostCard = ({
       <div className="top-layer flex items-center gap-x-2 mb-2">
         <a href={`/post/${post.id}`} className="flex items-center gap-x-2">
           <FontAwesomeIcon
-            icon={isHover ? faHeartSolid : faHeartRegular}
+            icon={
+              isHover || post.likedByUserBefore ? faHeartSolid : faHeartRegular
+            }
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
             onClick={handleLikeButton}
-            className="like-btn text-gray-400 hover:text-orange-700 transition-colors duration-450"
+            className={getLikeButtonClasses()}
           />
           <p className="font-bold text-gray-600 hover:text-orange-700 text-xl">
             {capitalizeFirstLetter(post.title)}
