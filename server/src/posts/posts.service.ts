@@ -1,4 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './posts.entity';
@@ -6,7 +8,11 @@ import { PostDto, PostFeed, UpdatePostDto } from './dto';
 
 @Injectable()
 export class PostsService {
-  constructor(@InjectRepository(Post) private postsRepo: Repository<Post>) {}
+  constructor(
+    @InjectRepository(Post) private postsRepo: Repository<Post>,
+    private jwtService: JwtService,
+    private config: ConfigService,
+  ) {}
 
   async create(data: PostDto): Promise<Post> {
     const post = this.postsRepo.create({
@@ -46,24 +52,33 @@ export class PostsService {
       .getMany();
   }
 
-  async list(): Promise<any> {
-    return this.postsRepo
+  async list(token?: string | null): Promise<any> {
+    const query = this.postsRepo
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
       .loadRelationCountAndMap('post.commentCount', 'post.comments')
-      .loadRelationCountAndMap('post.likeCount', 'post.likes')
-      .select([
-        'post.id',
-        'post.title',
-        'post.url',
-        'post.createdAt',
-        'author.id',
-        'author.firstName',
-        'author.lastName',
-        'author.email',
-      ])
-      .orderBy('post.createdAt', 'DESC')
-      .getMany();
+      .loadRelationCountAndMap('post.likeCount', 'post.likes');
+
+    if (token) {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.config.get<string>('JWT_SECRET'),
+      });
+
+      let userId = payload.id;
+
+      query
+        .leftJoin('post.likes', 'like')
+        .addSelect(
+          `CASE
+            WHEN like.authorId = :userId THEN true
+            ELSE false
+          END`,
+          'post_likedByUserBefore',
+        )
+        .setParameter('userId', userId);
+    }
+
+    return query.orderBy('post.createdAt', 'DESC').getMany();
   }
 
   async updatePostByPostIdAndUserId(

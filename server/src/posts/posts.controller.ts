@@ -13,6 +13,7 @@ import {
 import { PostsService } from './posts.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
+import { Request } from 'express';
 
 @Controller('posts')
 export class PostsController {
@@ -25,8 +26,9 @@ export class PostsController {
   }
 
   @Get('/feed')
-  async getFeed() {
-    return this.postsService.list();
+  async feed(@Req() req: Request) {
+    const token = req.headers.authorization.split(' ')[1];
+    return this.postsService.list(token);
   }
 
   @Get('/:id')

@@ -16,6 +16,9 @@ export class Post extends AbstractEntitiy {
   @Column()
   authorId: string;
 
+  @Column({})
+  likedByUserBefore: boolean;
+
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'authorId' })
   author: User;

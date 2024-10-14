@@ -67,8 +67,9 @@ export class UsersService {
    */
 
   async findOneByEmail(email: string): Promise<User> {
-    return await this.usersRepo.findOneBy({
-      email,
+    return await this.usersRepo.findOne({
+      where: { email },
+      select: ['id', 'firstName', 'lastName', 'email', 'password', 'createdAt'],
     });
   }
 }
