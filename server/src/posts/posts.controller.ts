@@ -27,7 +27,7 @@ export class PostsController {
 
   @Get('/feed')
   async feed(@Req() req: Request) {
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization?.split(' ')[1];
     return this.postsService.list(token);
   }
 
