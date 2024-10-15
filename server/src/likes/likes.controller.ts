@@ -5,13 +5,16 @@ import {
   Param,
   Post,
   Req,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 
 import { LikesService } from './likes.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { TypeormExceptionFilter } from 'src/filters/typeOrm-exception.filter';
 
 @Controller('likes')
+@UseFilters(TypeormExceptionFilter)
 @UseGuards(AuthGuard)
 export class LikesController {
   constructor(private likesService: LikesService) {}

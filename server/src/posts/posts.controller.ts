@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Req,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 
@@ -14,8 +15,10 @@ import { PostsService } from './posts.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
 import { Request } from 'express';
+import { TypeormExceptionFilter } from 'src/filters';
 
 @Controller('posts')
+@UseFilters(TypeormExceptionFilter)
 export class PostsController {
   constructor(private postsService: PostsService) {}
 

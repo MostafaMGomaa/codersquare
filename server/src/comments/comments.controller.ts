@@ -6,14 +6,17 @@ import {
   Param,
   Post,
   Req,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { CommnetsService } from './comments.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateCommentBody } from './dto';
+import { TypeormExceptionFilter } from 'src/filters';
 
-@UseGuards(AuthGuard)
 @Controller('comments')
+@UseFilters(TypeormExceptionFilter)
+@UseGuards(AuthGuard)
 export class CommentsController {
   constructor(private commentsService: CommnetsService) {}
 
