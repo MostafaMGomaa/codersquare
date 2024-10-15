@@ -17,4 +17,6 @@ export const getTypeOrmConfig = (
   database: config.get<string>('DATABASE_NAME'),
   entities: [User, Post, Like, Comment],
   synchronize: config.get<string>('NODE_ENV') === 'development',
+  migrations: ['dist/migrations/*.js'],
+  migrationsRun: true,
 });
