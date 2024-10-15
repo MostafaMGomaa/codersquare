@@ -25,7 +25,7 @@ export class PostsService {
   }
 
   async findPostById(id: string): Promise<Post> {
-    return this.postsRepo
+    const post = await this.postsRepo
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
       .loadRelationCountAndMap('post.likeCount', 'post.likes')
@@ -41,6 +41,10 @@ export class PostsService {
         'author.email',
       ])
       .getOne();
+
+    if (!post) throw new NotFoundException('cannot find this post');
+
+    return post;
   }
 
   async findPostsByUserId(authorId: string): Promise<Post[]> {
