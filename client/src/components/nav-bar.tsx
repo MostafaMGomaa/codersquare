@@ -29,7 +29,9 @@ export const NavBar = () => {
 
   return (
     <div className="flex justify-between items-center m-4 navbar">
-      <img src={LOGO} alt="Logo" className="h-10 w-auto" />
+      <a href="/">
+        <img src={LOGO} alt="Logo" className="h-10 w-auto" />
+      </a>
 
       {localStorage.getItem('jwt') ? (
         <div className="flex">
