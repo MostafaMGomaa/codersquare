@@ -29,6 +29,7 @@ export class CommnetsService {
         'author.lastName',
         'author.email',
       ])
+      .orderBy('comment.created_at', 'DESC')
       .getMany();
   }
 
