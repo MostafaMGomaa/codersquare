@@ -48,7 +48,7 @@ export class TypeormExceptionFilter implements ExceptionFilter {
         const invalidField = exception.message.match(
           /invalid input syntax for type uuid: "([^"]+)"/,
         );
-        console.log({ invalidField });
+
         message = invalidField
           ? `Invaild ID. Please provide a correctly formatted UUID and try again.`
           : 'The input format is invalid. Please check your data and try again.';
