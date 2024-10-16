@@ -1,27 +1,27 @@
 import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { twMerge } from 'tailwind-merge';
+import { useNavigate } from 'react-router-dom';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { QueryObserverResult } from '@tanstack/react-query';
-import { Post } from '@codersquare/shared/src/types';
+import { Post } from '@codersquare/shared';
 
-import { useCreateLikeMutation } from '../api';
-import { CreateLikePayload } from '../types';
+import { useCreateLikeMutation, useDeleteLikeMutation } from '../api';
+import { CreateLikePayload, DeleteLikePayload } from '../types';
 import { getTimeAgo } from '../utils';
-import { useNavigate } from 'react-router-dom';
 
 export const PostCard = ({
   post,
   buttonClasses,
   divClasses,
-  refetch,
+  onChange,
 }: {
   post: Post;
   buttonClasses?: string;
   divClasses?: string;
   refetch: any;
+  onChange: any;
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [likesCount, setLikesCount] = useState<number>(post.likeCount);
@@ -29,6 +29,8 @@ export const PostCard = ({
   const navigate = useNavigate();
   const commentCount = `${post.commentCount} comments`;
   const createLikeMutation = useCreateLikeMutation();
+  const deleteLikeMutation = useDeleteLikeMutation();
+
   const commentClasses = twMerge(
     `px-6 py-[1px] ml-5 border border-gray-400 text-gray-400 rounded-md text-center text-sm
           hover:bg-orange-700 hover:border-transparent hover:text-white`,
@@ -44,19 +46,38 @@ export const PostCard = ({
       : defaultClasses;
   };
 
-  const handleLikeButton = async (e: FormEvent) => {
-    e.preventDefault();
-    // Increase like counter
-    setLikesCount(likesCount + 1);
-
-    // send request to the server
-    const createLikePayload: CreateLikePayload = {
-      postId: post.id,
-      jwt: localStorage.getItem('jwt') as string,
-    };
-    await createLikeMutation.mutateAsync(createLikePayload);
-    await refetch();
+  const handleDisLikeButton = async () => {
     try {
+      setLikesCount(likesCount - 1);
+
+      const payload: DeleteLikePayload = {
+        postId: post.id,
+        jwt: localStorage.getItem('jwt') as string,
+      };
+
+      await deleteLikeMutation.mutateAsync(payload);
+    } catch (err) {
+      setLikesCount(likesCount + 1);
+
+      const error =
+        err instanceof Error ? err.message : 'Error while creating like';
+      toast.error(error, {
+        position: 'bottom-right',
+      });
+    }
+  };
+
+  const handleLikeButton = async () => {
+    try {
+      // Increase like counter
+      setLikesCount(likesCount + 1);
+
+      // send request to the server
+      const createLikePayload: CreateLikePayload = {
+        postId: post.id,
+        jwt: localStorage.getItem('jwt') as string,
+      };
+      await createLikeMutation.mutateAsync(createLikePayload);
     } catch (err) {
       const error =
         err instanceof Error ? err.message : 'Error while creating like';
@@ -66,9 +87,24 @@ export const PostCard = ({
       setLikesCount(likesCount - 1);
     }
   };
+
+  const handleToggleLikeButton = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (post.likedByUserBefore) {
+      onChange({ id: post.id, likedByUserBefore: false });
+      handleDisLikeButton();
+    } else {
+      onChange({ id: post.id, likedByUserBefore: true });
+      handleLikeButton();
+    }
+  };
+
   const handleCommentButton = () => {
     navigate(`/post/${post.id}`);
   };
+
+  console.log({ post });
 
   return (
     <div className={parentDivClasses} key={post.id}>
@@ -80,7 +116,7 @@ export const PostCard = ({
             }
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}
-            onClick={handleLikeButton}
+            onClick={handleToggleLikeButton}
             className={getLikeButtonClasses()}
           />
           <p className="font-bold text-gray-600 hover:text-orange-700 text-xl">

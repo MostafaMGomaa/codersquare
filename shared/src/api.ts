@@ -15,3 +15,9 @@ export interface CreatePostResponse extends Post {}
 export interface CreateCommentResponse extends Comment {}
 
 export interface GetMeResponse extends User {}
+
+export interface DeleteLikeResponse {
+  data: {
+    message: string;
+  };
+}

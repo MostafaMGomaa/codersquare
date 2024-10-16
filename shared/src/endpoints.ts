@@ -24,6 +24,7 @@ export enum EndpointsUrl {
 
   /** Likes */
   createLike = 'likes/:postId',
+  deleteLike = 'likes/:postId',
 
   /** Users */
   getMe = 'users/me',
@@ -48,6 +49,7 @@ export enum Endpoints {
 
   /** Likes */
   createLike = 'createLike',
+  deleteLike = 'deleteLike',
 
   /** User */
   getMe = 'getMe',
@@ -100,6 +102,11 @@ export const ENDPOINTS_CONFIGS = {
   [Endpoints.createLike]: {
     method: 'post',
     url: EndpointsUrl.createLike,
+    auth: true,
+  },
+  [Endpoints.deleteLike]: {
+    method: 'delete',
+    url: EndpointsUrl.deleteLike,
     auth: true,
   },
 
