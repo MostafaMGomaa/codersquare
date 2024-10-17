@@ -2,7 +2,7 @@ import { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
-import { FormButton, ShadowButton } from './buttons';
+import { FormButton, ShadowButton } from './common';
 import { JWTPayload } from '../types';
 import LOGO from '../assets/logo.svg';
 

@@ -4,8 +4,8 @@ import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQueryClient } from '@tanstack/react-query'; // Import this
 import { FormButton } from './form-button';
-import { createCommentMutation } from '../../api';
-import { CreateCommentPayload } from '../../types';
+import { createCommentMutation } from '../../../api';
+import { CreateCommentPayload } from '../../../types';
 
 export const AddButton = ({ postId }: { postId: string }) => {
   const [commentData, setCommentData] = useState<CreateCommentPayload>({
