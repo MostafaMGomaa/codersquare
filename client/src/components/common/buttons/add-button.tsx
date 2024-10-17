@@ -2,7 +2,8 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useQueryClient } from '@tanstack/react-query'; // Import this
+import { useQueryClient } from '@tanstack/react-query';
+
 import { FormButton } from './form-button';
 import { createCommentMutation } from '../../../api';
 import { CreateCommentPayload } from '../../../types';
@@ -15,7 +16,7 @@ export const AddButton = ({ postId }: { postId: string }) => {
   });
   const [activeAddBtn, setActiveButton] = useState(false);
 
-  const queryClient = useQueryClient(); // Get queryClient from useQueryClient
+  const queryClient = useQueryClient();
   const mutation = createCommentMutation();
 
   const handleCreateCommentData = (e: ChangeEvent<HTMLTextAreaElement>) => {
