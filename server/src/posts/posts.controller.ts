@@ -10,11 +10,11 @@ import {
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
+import { Request } from 'express';
 
 import { PostsService } from './posts.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
-import { Request } from 'express';
 import { TypeormExceptionFilter } from 'src/filters';
 
 @Controller('posts')
