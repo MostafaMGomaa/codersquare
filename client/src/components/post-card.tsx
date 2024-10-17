@@ -20,8 +20,7 @@ export const PostCard = ({
   post: Post;
   buttonClasses?: string;
   divClasses?: string;
-  refetch: any;
-  onChange: any;
+  onChange?: (post: Partial<Post>) => void;
 }) => {
   const [isHover, setIsHover] = useState(false);
   const [likesCount, setLikesCount] = useState<number>(post.likeCount);
@@ -91,20 +90,20 @@ export const PostCard = ({
   const handleToggleLikeButton = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (post.likedByUserBefore) {
-      onChange({ id: post.id, likedByUserBefore: false });
-      handleDisLikeButton();
-    } else {
-      onChange({ id: post.id, likedByUserBefore: true });
-      handleLikeButton();
+    if (onChange) {
+      if (post.likedByUserBefore) {
+        onChange({ id: post.id, likedByUserBefore: false });
+        handleDisLikeButton();
+      } else {
+        onChange({ id: post.id, likedByUserBefore: true });
+        handleLikeButton();
+      }
     }
   };
 
   const handleCommentButton = () => {
     navigate(`/post/${post.id}`);
   };
-
-  console.log({ post });
 
   return (
     <div className={parentDivClasses} key={post.id}>

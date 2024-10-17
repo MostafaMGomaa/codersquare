@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Post, Comment } from '@codersquare/shared';
-import { PostCard, CommentCard, AddButton } from '../../components';
+import { PostCard, CommentCard, AddButton, Spinner } from '../../components';
 import { getOnePost, listPostComments } from '../../api';
 import { ListPostCommentsPayload } from '../../types';
 
@@ -39,7 +39,9 @@ export const ViewPost = () => {
     queryFn: () => listPostComments(listPostCommentsPayload),
   });
 
-  if (postLoading || commentsLoading) return <div>Loading...</div>;
+  if (postLoading || commentsLoading) {
+    return <Spinner />;
+  }
   if (postError || commentsError)
     return (
       <div>
@@ -47,10 +49,27 @@ export const ViewPost = () => {
         {postError?.message || commentsError?.message || 'An error occurred.'}
       </div>
     );
+  const queryClient = useQueryClient();
+
+  function onChange(updatedPost: Partial<Post>) {
+    queryClient.setQueryData(['feed'], (posts: Post[]) => {
+      return posts.map((post: Post) => {
+        if (post.id === updatedPost.id) {
+          return { ...post, ...updatedPost };
+        }
+        return post;
+      });
+    });
+  }
 
   return (
     <>
-      <PostCard post={postData!} buttonClasses="hidden" divClasses="m-10" />
+      <PostCard
+        post={postData!}
+        buttonClasses="hidden"
+        divClasses="m-10"
+        onChange={onChange}
+      />
 
       {commentsData?.map((comment: Comment) => (
         <CommentCard comment={comment} key={comment.id} />
