@@ -24,22 +24,21 @@ export class PostsService {
     return this.postsRepo.save(post);
   }
 
-  async findPostById(id: string): Promise<Post> {
+  async findPostById(id: string, userId: string): Promise<Post> {
     const post = await this.postsRepo
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
       .loadRelationCountAndMap('post.likeCount', 'post.likes')
       .where('post.id = :id', { id })
-      .select([
-        'post.id',
-        'post.title',
-        'post.url',
-        'post.createdAt',
-        'author.id',
-        'author.firstName',
-        'author.lastName',
-        'author.email',
-      ])
+      .leftJoin('post.likes', 'like')
+      .addSelect(
+        `CASE
+            WHEN like.authorId = :userId THEN true
+            ELSE false
+          END`,
+        'post_likedByUserBefore',
+      )
+      .setParameter('userId', userId)
       .getOne();
 
     if (!post) throw new NotFoundException('cannot find this post');

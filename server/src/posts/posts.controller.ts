@@ -36,8 +36,8 @@ export class PostsController {
 
   @Get('/:id')
   @UseGuards(AuthGuard)
-  async getOnePostById(@Param('id') id: string) {
-    return this.postsService.findPostById(id);
+  async getOnePostById(@Param('id') id: string, @Req() req) {
+    return this.postsService.findPostById(id, req.user.id);
   }
 
   @Post('')
