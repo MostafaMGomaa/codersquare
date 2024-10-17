@@ -11,6 +11,7 @@ import { ErrorPage } from '../error';
 
 export const ViewPost = () => {
   const { id } = useParams<{ id?: string }>();
+  const queryClient = useQueryClient();
 
   if (!id) {
     return (
@@ -73,7 +74,6 @@ export const ViewPost = () => {
       />
     );
   }
-  const queryClient = useQueryClient();
 
   function onChange(updatedPost: Partial<Post>) {
     queryClient.setQueryData(['feed'], (posts: Post[]) => {
@@ -85,6 +85,8 @@ export const ViewPost = () => {
       });
     });
   }
+
+  console.log({ like: postData });
 
   return (
     <>
