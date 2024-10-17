@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { twMerge } from 'tailwind-merge';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -108,7 +108,7 @@ export const PostCard = ({
   return (
     <div className={parentDivClasses} key={post.id}>
       <div className="top-layer flex items-center gap-x-2 mb-2">
-        <a href={`/post/${post.id}`} className="flex items-center gap-x-2">
+        <Link to={`/post/${post.id}`} className="flex items-center gap-x-2">
           <FontAwesomeIcon
             icon={
               isHover || post.likedByUserBefore ? faHeartSolid : faHeartRegular
@@ -121,7 +121,7 @@ export const PostCard = ({
           <p className="font-bold text-gray-600 hover:text-orange-700 text-xl">
             {capitalizeFirstLetter(post.title)}
           </p>
-        </a>
+        </Link>
         <span className="text-gray-400"> ({shortenUrl(post.url)})</span>
         <button className={commentClasses} onClick={handleCommentButton}>
           {commentCount}
@@ -131,9 +131,9 @@ export const PostCard = ({
       <div className="flex items-center mx-6 gap-x-2 text-xs text-gray-400">
         <span>{`${likesCount} likes`}</span>
         <span>|</span>
-        <a href="#" className="font-semibold hover:text-orange-700">
+        <Link to="#" className="font-semibold hover:text-orange-700">
           {post.author.email.split('@')[0]}
-        </a>
+        </Link>
         <span>|</span>
         <span>{getTimeAgo(post.createdAt)}</span>
       </div>

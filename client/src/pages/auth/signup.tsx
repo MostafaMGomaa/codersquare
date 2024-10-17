@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useSignupMutation } from '../../api';
 import { FormButton, FormInput } from '../../components';
 import { SignupPayload } from '../../types';
+import { FormLink } from '../../components/common/form-link';
 
 export const SignupForm = () => {
   const [signupData, setSignupData] = useState<SignupPayload>({
@@ -92,6 +93,11 @@ export const SignupForm = () => {
           isPending={signupMutation.isPending}
           pendingText="Signing up..."
           text="Sign Up"
+        />
+        <FormLink
+          text="Already have an account ? Sign in with your account"
+          url="/signin"
+          urlText="Sign in"
         />
       </form>
     </div>

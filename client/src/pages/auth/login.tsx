@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { FormButton, FormInput } from '../../components';
 import { useLoginMutation } from '../../api/auth';
 import { LoginPayload } from '../../types';
+import { FormLink } from '../../components/common/form-link';
 
 export const LoginForm = () => {
   const [loginData, setLoginData] = useState<LoginPayload>({
@@ -24,7 +25,7 @@ export const LoginForm = () => {
 
     try {
       await loginMutation.mutateAsync(loginData);
-      toast.success('Successfully Signup!');
+      toast.success('Successfully Sign in!');
       setTimeout(() => {
         navigate('/');
       }, 10 * 100);
@@ -66,6 +67,11 @@ export const LoginForm = () => {
           isPending={loginMutation.isPending}
           pendingText="Signing in..."
           text="Sign In"
+        />
+        <FormLink
+          text="Doesn't have an account ? Sign up to start"
+          url="/signup"
+          urlText="Sign up"
         />
       </form>
     </div>

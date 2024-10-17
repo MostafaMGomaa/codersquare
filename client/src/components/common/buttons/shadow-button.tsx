@@ -1,5 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import { ShadowButtonProps } from '../../../types';
+import { Link } from 'react-router-dom';
 
 export const ShadowButton: React.FC<ShadowButtonProps> = ({
   text,
@@ -8,8 +9,8 @@ export const ShadowButton: React.FC<ShadowButtonProps> = ({
   onClick,
 }) => {
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       className={`${twMerge(
         'flex place-items-center mx-4 text-gray-500 font-semibold text-center hover:text-gray-800 transition-colors duration-300',
         extraClasses,
@@ -17,6 +18,6 @@ export const ShadowButton: React.FC<ShadowButtonProps> = ({
       onClick={onClick}
     >
       {text}
-    </a>
+    </Link>
   );
 };

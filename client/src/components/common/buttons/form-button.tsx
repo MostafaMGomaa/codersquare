@@ -1,6 +1,6 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
-import { FormButtonProps } from '../../types';
+import { FormButtonProps } from '../../../types';
 
 export const FormButton: React.FC<FormButtonProps> = ({
   text,

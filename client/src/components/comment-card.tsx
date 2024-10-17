@@ -4,6 +4,7 @@ import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Comment } from '@codersquare/shared';
 import { getTimeAgo } from '../utils';
+import { Link } from 'react-router-dom';
 
 export const CommentCard = ({ comment }: { comment: Comment }) => {
   const [isHover, setIsHover] = useState(false);
@@ -18,12 +19,12 @@ export const CommentCard = ({ comment }: { comment: Comment }) => {
           onMouseLeave={() => setIsHover(false)}
           className="like-btn text-gray-400 hover:text-orange-700 transition-colors duration-450"
         />
-        <a
+        <Link
           className="font-bold text-gray-600 hover:text-orange-700 text-xl"
-          href={`/users/${comment.authorId}`}
+          to={`/users/${comment.authorId}`}
         >
           {username}
-        </a>
+        </Link>
         <span className="text-gray-400">|</span>
         <p className="text-xs text-gray-400">{getTimeAgo(comment.createdAt)}</p>
       </div>

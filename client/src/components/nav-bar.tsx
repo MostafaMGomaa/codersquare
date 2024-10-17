@@ -1,5 +1,5 @@
 import { FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 import { FormButton, ShadowButton } from './common';
@@ -29,9 +29,9 @@ export const NavBar = () => {
 
   return (
     <div className="flex justify-between items-center m-4 navbar">
-      <a href="/">
+      <Link to="/">
         <img src={LOGO} alt="Logo" className="h-10 w-auto" />
-      </a>
+      </Link>
 
       {localStorage.getItem('jwt') ? (
         <div className="flex">
@@ -50,12 +50,12 @@ export const NavBar = () => {
         <div className="flex auth-buttons">
           <ShadowButton text="Sign in" href="/signin" />
 
-          <a
-            href="/signup"
+          <Link
+            to="/signup"
             className="bg-orange-700 hover:bg-orange-800 text-white text-center font-bold py-2 px-4 rounded-md transition-transform duration-400 "
           >
             Sign up
-          </a>
+          </Link>
         </div>
       )}
     </div>
