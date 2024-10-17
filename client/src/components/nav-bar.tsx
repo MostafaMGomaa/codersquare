@@ -1,5 +1,5 @@
 import { FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
 import { FormButton, ShadowButton } from './common';
@@ -9,6 +9,10 @@ import LOGO from '../assets/logo.svg';
 export const NavBar = () => {
   const navigate = useNavigate();
   const jwt = localStorage.getItem('jwt') || '';
+  const [searchParams] = useSearchParams();
+
+  const nextPage = searchParams.get('next') || '';
+
   let username = '';
 
   if (jwt && jwt !== '') {
@@ -48,10 +52,10 @@ export const NavBar = () => {
         </div>
       ) : (
         <div className="flex auth-buttons">
-          <ShadowButton text="Sign in" href="/signin" />
+          <ShadowButton text="Sign in" href={`/signin?next=${nextPage}`} />
 
           <Link
-            to="/signup"
+            to={`/signup?next=${nextPage}`}
             className="bg-orange-700 hover:bg-orange-800 text-white text-center font-bold py-2 px-4 rounded-md transition-transform duration-400 "
           >
             Sign up

@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { useSignupMutation } from '../../api';
@@ -15,8 +15,11 @@ export const SignupForm = () => {
     password: '',
   });
 
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const signupMutation = useSignupMutation();
+
+  const nextPage = searchParams.get('next') || '/';
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -25,7 +28,7 @@ export const SignupForm = () => {
       await signupMutation.mutateAsync(signupData);
       toast.success('Successfully Signup!');
       setTimeout(() => {
-        navigate('/');
+        navigate(nextPage);
       }, 10 * 100);
     } catch (err) {
       const error = err instanceof Error ? err.message : 'Signup failed';
@@ -96,7 +99,7 @@ export const SignupForm = () => {
         />
         <FormLink
           text="Already have an account ? Sign in with your account"
-          url="/signin"
+          url={`/signin?next=${nextPage}`}
           urlText="Sign in"
         />
       </form>

@@ -12,6 +12,7 @@ import {
 } from './pages';
 import { NavBar } from './components';
 import { CreatePost, ErrorPage } from './pages';
+import { ProtectedRoute } from './utils/protected-route';
 
 function App() {
   return (
@@ -23,9 +24,11 @@ function App() {
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/signin" element={<LoginForm />} />
           <Route path="/" element={<ListPosts />} />
-          <Route path="/post/:id" element={<ViewPost />} />
-          <Route path="/post/create" element={<CreatePost />}></Route>
-          <Route path="/me" element={<UserProfile />}></Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/post/:id" element={<ViewPost />} />
+            <Route path="/post/create" element={<CreatePost />}></Route>
+            <Route path="/me" element={<UserProfile />}></Route>
+          </Route>
           <Route
             path="*"
             element={
