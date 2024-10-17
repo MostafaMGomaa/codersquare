@@ -1,7 +1,12 @@
 import { GetMeResponse } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { getMe } from '../../api';
 import { formatDate } from '../../utils/date';
+import { ErrorPage } from '../error';
+import { Spinner } from '../../components';
 
 export const UserProfile = () => {
   const jwt = localStorage.getItem('jwt') as string;
@@ -12,11 +17,23 @@ export const UserProfile = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   if (error) {
-    return <div>Error loading data</div>;
+    return (
+      <ErrorPage
+        errorMessage="Error, fetching the data"
+        errorDetails="Sorry, we can't fetch data, please try again later."
+        statusCode={500}
+        icon={
+          <FontAwesomeIcon
+            icon={faTriangleExclamation}
+            className="text-orange-600 text-8xl mb-4 animate-bounce"
+          />
+        }
+      />
+    );
   }
 
   return (

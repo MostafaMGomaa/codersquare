@@ -1,8 +1,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 import { Post } from '@codersquare/shared/src/types';
 import { getAllPosts } from '../../api';
 import { PostCard, Spinner } from '../../components';
+import { ErrorPage } from '../error';
 
 export const ListPosts = () => {
   const { data, error, isLoading } = useQuery<Post[]>({
@@ -27,7 +30,19 @@ export const ListPosts = () => {
   }
 
   if (error) {
-    return <div>Error loading posts</div>;
+    return (
+      <ErrorPage
+        errorMessage="Error, fetching the data"
+        errorDetails="Sorry, we can't fetch data, please try again later."
+        statusCode={500}
+        icon={
+          <FontAwesomeIcon
+            icon={faTriangleExclamation}
+            className="text-orange-600 text-8xl mb-4 animate-bounce"
+          />
+        }
+      />
+    );
   }
 
   return (
