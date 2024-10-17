@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
   ListPosts,
@@ -9,10 +11,7 @@ import {
   UserProfile,
 } from './pages';
 import { NavBar } from './components';
-import { CreatePost } from './pages/posts/create-post';
-import { ErrorPage } from './pages/error';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CreatePost, ErrorPage } from './pages';
 
 function App() {
   return (
