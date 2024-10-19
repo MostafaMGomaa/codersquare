@@ -12,7 +12,7 @@ import {
 import { CommnetsService } from './comments.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateCommentBody } from './dto';
-import { TypeormExceptionFilter } from 'src/filters';
+import { TypeormExceptionFilter } from 'src/common';
 
 @Controller('comments')
 @UseFilters(TypeormExceptionFilter)

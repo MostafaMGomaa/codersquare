@@ -11,7 +11,7 @@ import {
 
 import { LikesService } from './likes.service';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { TypeormExceptionFilter } from 'src/filters/typeOrm-exception.filter';
+import { TypeormExceptionFilter } from 'src/common';
 
 @Controller('likes')
 @UseFilters(TypeormExceptionFilter)

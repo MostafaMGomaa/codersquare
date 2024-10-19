@@ -15,7 +15,7 @@ import { Request } from 'express';
 import { PostsService } from './posts.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
-import { TypeormExceptionFilter } from 'src/filters';
+import { TypeormExceptionFilter } from 'src/common';
 
 @Controller('posts')
 @UseFilters(TypeormExceptionFilter)
