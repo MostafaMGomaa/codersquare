@@ -1,6 +1,7 @@
-export interface PaginationResult<T> {
+export interface DataResult<T> {
   data: T[] | T | string;
-  meta: {
+  meta?: {
+    count: number;
     nextCursor: string | null;
   };
 }
