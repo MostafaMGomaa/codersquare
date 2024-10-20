@@ -31,7 +31,7 @@ export class PostsService {
     token?: string | null,
   ): Promise<DataResult<Post[]>> {
     const { strategy, cursor, limit, orderType } = paginate(paginateData);
-    console.log({ limit });
+
     const query = this.postsRepo
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')

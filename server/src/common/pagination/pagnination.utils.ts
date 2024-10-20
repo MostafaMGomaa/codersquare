@@ -8,7 +8,7 @@ export function paginate(dto: PaginationDto): PaginateResult {
   };
   const cursorField = (dto.cursorField as CursorField) || CursorField.createdAt;
   const strategy = strategies[cursorField];
-  const limit = dto.limit || 10;
+  const limit = Number(dto.limit) || 10;
   const cursor = dto.cursor || null;
 
   return { strategy, limit, cursor };

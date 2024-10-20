@@ -32,7 +32,6 @@ export class PostsController {
   @Get('/feed')
   async feed(@Req() req: Request, @Query() query: PaginationDto) {
     const token = req.headers.authorization?.split(' ')[1];
-    console.log({ query });
     return this.postsService.list(query, token);
   }
 

@@ -7,13 +7,13 @@ import { SelectQueryBuilder } from 'typeorm';
 export class CreatedAtStrategy implements PaginationStrategy {
   applyCursor(
     query: SelectQueryBuilder<Post | Comment>,
-    cursor: string = new Date().toISOString(),
+    cursor: string | Date = new Date().toISOString(),
     orderType: OrderType = OrderType.desc,
   ): void {
-    if (!cursor) cursor = new Date().toISOString();
+    if (!cursor) cursor = new Date();
 
     query
-      .andWhere('post.createdAt < :cursor', { cursor })
+      .andWhere('post.createdAt <= :cursor', { cursor })
       .orderBy(`post.createdAt`, orderType);
   }
 
