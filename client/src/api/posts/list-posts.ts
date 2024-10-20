@@ -1,7 +1,14 @@
-import { Post, ENDPOINTS_CONFIGS, Endpoints } from '@codersquare/shared';
+import {
+  Post,
+  ENDPOINTS_CONFIGS,
+  Endpoints,
+  DataResult,
+} from '@codersquare/shared';
 import { HOST } from '../';
 
-export const getAllPosts = async (jwt?: string): Promise<Post[]> => {
+export const getAllPosts = async (
+  jwt?: string,
+): Promise<DataResult<Post[]>> => {
   let headers: HeadersInit = {
     'Content-Type': 'application/json',
   };

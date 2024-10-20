@@ -2,9 +2,10 @@ import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { DataResult } from '@codersquare/shared';
 import { Comment } from './comments.entity';
 import { CommentDto } from './dto';
-import { DataResult, paginate, PaginationDto } from 'src/common';
+import { paginate, PaginationDto } from 'src/common';
 
 @Injectable()
 export class CommnetsService {

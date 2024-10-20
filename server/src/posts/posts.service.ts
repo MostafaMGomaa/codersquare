@@ -1,11 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
+
+import { DataResult } from '@codersquare/shared';
 import { Post } from './posts.entity';
-import { PostDto, PostFeed, UpdatePostDto } from './dto';
-import { DataResult, paginate, PaginationDto } from 'src/common';
+import { PostDto, UpdatePostDto } from './dto';
+import { paginate, PaginationDto } from 'src/common';
 
 @Injectable()
 export class PostsService {

@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
-import { Post, Comment } from '@codersquare/shared';
+import { Post, Comment, DataResult } from '@codersquare/shared';
 import { PostCard, CommentCard, AddButton, Spinner } from '../../components';
 import { getOnePost, listPostComments } from '../../api';
 import { ListPostCommentsPayload } from '../../types';
@@ -48,10 +48,10 @@ export const ViewPost = () => {
   });
 
   const {
-    data: commentsData,
+    data: commentsResponse,
     error: commentsError,
     isLoading: commentsLoading,
-  } = useQuery<Comment[]>({
+  } = useQuery<DataResult<Comment[]>>({
     queryKey: ['comments', id],
     queryFn: () => listPostComments(listPostCommentsPayload),
   });
@@ -86,8 +86,6 @@ export const ViewPost = () => {
     });
   }
 
-  console.log({ like: postData });
-
   return (
     <>
       <PostCard
@@ -97,9 +95,10 @@ export const ViewPost = () => {
         onChange={onChange}
       />
 
-      {commentsData?.map((comment: Comment) => (
-        <CommentCard comment={comment} key={comment.id} />
-      ))}
+      {commentsResponse?.data &&
+        commentsResponse!.data.map((comment: Comment) => (
+          <CommentCard comment={comment} key={comment.id} />
+        ))}
 
       <AddButton postId={id} />
     </>

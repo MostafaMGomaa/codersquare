@@ -3,12 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 import { Post } from '@codersquare/shared/src/types';
+import { DataResult } from '@codersquare/shared';
 import { getAllPosts } from '../../api';
 import { PostCard, Spinner } from '../../components';
 import { ErrorPage } from '../error';
 
 export const ListPosts = () => {
-  const { data, error, isLoading } = useQuery<Post[]>({
+  const {
+    data: response,
+    error,
+    isLoading,
+  } = useQuery<DataResult<Post[]>>({
     queryKey: ['feed'],
     queryFn: () => getAllPosts(localStorage.getItem('jwt') as string),
   });
@@ -47,8 +52,8 @@ export const ListPosts = () => {
 
   return (
     <div className="flex flex-col  gap-x-0.5 place-items-start justify-center container px-[1rem] py-4">
-      {data &&
-        data.map((post: Post) => (
+      {response.data &&
+        response.data.map((post: Post) => (
           <PostCard key={post.id} post={post} onChange={onChange} />
         ))}
     </div>
