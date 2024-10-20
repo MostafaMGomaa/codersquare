@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseFilters,
   UseGuards,
@@ -12,7 +13,7 @@ import {
 import { CommnetsService } from './comments.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreateCommentBody } from './dto';
-import { TypeormExceptionFilter } from 'src/common';
+import { PaginationDto, TypeormExceptionFilter } from 'src/common';
 
 @Controller('comments')
 @UseFilters(TypeormExceptionFilter)
@@ -34,8 +35,11 @@ export class CommentsController {
   }
 
   @Get('/:postId')
-  getAllByPostId(@Param('postId') postId: string) {
-    return this.commentsService.findAllByPostId(postId);
+  getAllByPostId(
+    @Param('postId') postId: string,
+    @Query() query: PaginationDto,
+  ) {
+    return this.commentsService.findAllByPostId(postId, query);
   }
 
   @Delete('/:id')

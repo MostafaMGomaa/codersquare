@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Comment } from './comments.entity';
 import { CommentDto } from './dto';
+import { DataResult, paginate, PaginationDto } from 'src/common';
 
 @Injectable()
 export class CommnetsService {
@@ -15,22 +16,38 @@ export class CommnetsService {
     return this.commentRepo.save(data);
   }
 
-  async findAllByPostId(postId: string): Promise<CommentDto[]> {
-    return this.commentRepo
-      .createQueryBuilder('comment')
-      .leftJoinAndSelect('comment.author', 'author')
-      .where('comment.postId = :postId', { postId })
+  async findAllByPostId(
+    postId: string,
+    paginateData: PaginationDto,
+  ): Promise<DataResult<CommentDto[]>> {
+    const { cursor, limit, strategy, orderType } = paginate(paginateData);
+
+    let query = this.commentRepo
+      .createQueryBuilder('d')
+      .leftJoinAndSelect('d.author', 'author')
+      .where('d.postId = :postId', { postId })
       .select([
-        'comment.id',
-        'comment.comment',
-        'comment.createdAt',
+        'd.id',
+        'd.comment',
+        'd.createdAt',
         'author.id',
         'author.firstName',
         'author.lastName',
         'author.email',
-      ])
-      .orderBy('comment.created_at', 'DESC')
-      .getMany();
+      ]);
+
+    strategy.applyCursor(query, cursor, orderType);
+
+    const data = await query.take(limit).getMany();
+    const nextCursor = strategy.getNextCursor(data);
+
+    return {
+      data,
+      meta: {
+        count: data.length,
+        nextCursor,
+      },
+    };
   }
 
   async delete(id: string, authorId: string): Promise<boolean> {

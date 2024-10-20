@@ -6,7 +6,6 @@ import { Repository } from 'typeorm';
 import { Post } from './posts.entity';
 import { PostDto, PostFeed, UpdatePostDto } from './dto';
 import { DataResult, paginate, PaginationDto } from 'src/common';
-import { CursorField } from 'src/types';
 
 @Injectable()
 export class PostsService {
@@ -33,10 +32,10 @@ export class PostsService {
     const { strategy, cursor, limit, orderType } = paginate(paginateData);
 
     const query = this.postsRepo
-      .createQueryBuilder('post')
-      .leftJoinAndSelect('post.author', 'author')
-      .loadRelationCountAndMap('post.commentCount', 'post.comments')
-      .loadRelationCountAndMap('post.likeCount', 'post.likes');
+      .createQueryBuilder('d')
+      .leftJoinAndSelect('d.author', 'author')
+      .loadRelationCountAndMap('d.commentCount', 'd.comments')
+      .loadRelationCountAndMap('d.likeCount', 'd.likes');
 
     if (token) {
       const payload = await this.jwtService.verifyAsync(token, {
@@ -46,7 +45,7 @@ export class PostsService {
       let userId = payload.id;
 
       query
-        .leftJoin('post.likes', 'like')
+        .leftJoin('d.likes', 'like')
         .addSelect(
           `CASE
             WHEN like.authorId = :userId THEN true
