@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Post } from './posts.entity';
 import { PostDto, PostFeed, UpdatePostDto } from './dto';
 import { DataResult, paginate, PaginationDto } from 'src/common';
+import { CursorField } from 'src/types';
 
 @Injectable()
 export class PostsService {
@@ -29,8 +30,8 @@ export class PostsService {
     paginateData: PaginationDto,
     token?: string | null,
   ): Promise<DataResult<Post[]>> {
-    const { cursor, limit } = paginate(paginateData);
-
+    const { strategy, cursor, limit, orderType } = paginate(paginateData);
+    console.log({ limit });
     const query = this.postsRepo
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.author', 'author')
@@ -56,15 +57,11 @@ export class PostsService {
         .setParameter('userId', userId);
     }
 
-    query.orderBy('post.createdAt', 'DESC');
+    strategy.applyCursor(query, cursor, orderType);
 
-    if (cursor) {
-      query.andWhere('post.createdAt < :cursor', { cursor });
-    }
+    const data = await query.take(limit).getMany();
 
-    const data = await query.take(10).getMany();
-    const nextCursor =
-      data.length > 0 ? data[data.length - 1].createdAt.toString() : null;
+    const nextCursor = strategy.getNextCursor(data);
 
     return {
       data,

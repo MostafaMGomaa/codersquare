@@ -1,4 +1,5 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { CursorField } from 'src/types';
 
 export class PaginationDto {
   @IsOptional()
@@ -7,4 +8,12 @@ export class PaginationDto {
 
   @IsOptional()
   limit?: number;
+
+  @IsOptional()
+  @IsString()
+  @IsEnum(CursorField)
+  cursorField: string;
+
+  @IsOptional()
+  orderType: string;
 }
