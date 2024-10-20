@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseFilters,
   UseGuards,
@@ -15,7 +16,7 @@ import { Request } from 'express';
 import { PostsService } from './posts.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CreatePostDto, UpdatePostDto } from './dto';
-import { TypeormExceptionFilter } from 'src/common';
+import { PaginationDto, TypeormExceptionFilter } from 'src/common';
 
 @Controller('posts')
 @UseFilters(TypeormExceptionFilter)
@@ -29,9 +30,10 @@ export class PostsController {
   }
 
   @Get('/feed')
-  async feed(@Req() req: Request) {
+  async feed(@Req() req: Request, @Query() query: PaginationDto) {
     const token = req.headers.authorization?.split(' ')[1];
-    return this.postsService.list(token);
+    console.log({ query });
+    return this.postsService.list(query, token);
   }
 
   @Get('/:id')

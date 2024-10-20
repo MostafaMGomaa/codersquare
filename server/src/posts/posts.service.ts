@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './posts.entity';
 import { PostDto, PostFeed, UpdatePostDto } from './dto';
+import { DataResult, paginate, PaginationDto } from 'src/common';
 
 @Injectable()
 export class PostsService {
@@ -22,6 +23,56 @@ export class PostsService {
     });
 
     return this.postsRepo.save(post);
+  }
+
+  async list(
+    paginateData: PaginationDto,
+    token?: string | null,
+  ): Promise<DataResult<Post[]>> {
+    const { cursor, limit } = paginate(paginateData);
+
+    const query = this.postsRepo
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.author', 'author')
+      .loadRelationCountAndMap('post.commentCount', 'post.comments')
+      .loadRelationCountAndMap('post.likeCount', 'post.likes');
+
+    if (token) {
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: this.config.get<string>('JWT_SECRET'),
+      });
+
+      let userId = payload.id;
+
+      query
+        .leftJoin('post.likes', 'like')
+        .addSelect(
+          `CASE
+            WHEN like.authorId = :userId THEN true
+            ELSE false
+          END`,
+          'post_likedByUserBefore',
+        )
+        .setParameter('userId', userId);
+    }
+
+    query.orderBy('post.createdAt', 'DESC');
+
+    if (cursor) {
+      query.andWhere('post.createdAt < :cursor', { cursor });
+    }
+
+    const data = await query.take(10).getMany();
+    const nextCursor =
+      data.length > 0 ? data[data.length - 1].createdAt.toString() : null;
+
+    return {
+      data,
+      meta: {
+        count: data.length,
+        nextCursor,
+      },
+    };
   }
 
   async findPostById(id: string, userId: string): Promise<Post> {
@@ -53,35 +104,6 @@ export class PostsService {
       .loadRelationCountAndMap('post.likesCount', 'post.likes')
       .where('post.authorId = :authorId', { authorId })
       .getMany();
-  }
-
-  async list(token?: string | null): Promise<any> {
-    const query = this.postsRepo
-      .createQueryBuilder('post')
-      .leftJoinAndSelect('post.author', 'author')
-      .loadRelationCountAndMap('post.commentCount', 'post.comments')
-      .loadRelationCountAndMap('post.likeCount', 'post.likes');
-
-    if (token) {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.config.get<string>('JWT_SECRET'),
-      });
-
-      let userId = payload.id;
-
-      query
-        .leftJoin('post.likes', 'like')
-        .addSelect(
-          `CASE
-            WHEN like.authorId = :userId THEN true
-            ELSE false
-          END`,
-          'post_likedByUserBefore',
-        )
-        .setParameter('userId', userId);
-    }
-
-    return query.orderBy('post.createdAt', 'DESC').getMany();
   }
 
   async updatePostByPostIdAndUserId(
