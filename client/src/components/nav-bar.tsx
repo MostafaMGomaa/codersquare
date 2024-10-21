@@ -33,8 +33,8 @@ export const NavBar = () => {
 
   return (
     <div className="flex justify-between items-center m-4 navbar">
-      <Link to="/">
-        <img src={LOGO} alt="Logo" className="h-10 w-auto" />
+      <Link to="/" className="h-2 min-h-10 min-w-[200px]">
+        <img src={LOGO} alt="Logo" className="min-h-10" />
       </Link>
 
       {localStorage.getItem('jwt') ? (
