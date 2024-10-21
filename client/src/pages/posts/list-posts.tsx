@@ -1,5 +1,9 @@
-import { useState } from 'react';
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  QueryKey,
+  useInfiniteQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPlus,
@@ -14,21 +18,25 @@ import { ErrorPage } from '../error';
 export const ListPosts = () => {
   const queryClient = useQueryClient();
 
-  let {
+  const {
     data: response,
     error,
     fetchNextPage,
     isLoading,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<DataResult<Post[]>>({
-    queryKey: ['posts'],
-    queryFn: () =>
+  } = useInfiniteQuery<
+    DataResult<Post[]>,
+    Error,
+    InfiniteData<DataResult<Post[]>>,
+    QueryKey,
+    string | undefined
+  >({
+    queryKey: ['feed'],
+    queryFn: ({ pageParam }) =>
       getAllPosts({
         jwt: localStorage.getItem('jwt') as string,
-        cursor:
-          response?.pages[response.pages.length - 1].meta?.nextCursor ||
-          undefined,
+        cursor: pageParam,
         cursorField: 'createdAt',
         limit: 10,
       }),
@@ -37,14 +45,24 @@ export const ListPosts = () => {
   });
 
   function onChange(updatedPost: Partial<Post>) {
-    queryClient.setQueryData(['feed'], (posts: Post[]) => {
-      return posts.map((post: Post) => {
-        if (post.id === updatedPost.id) {
-          return { ...post, ...updatedPost };
-        }
-        return post;
-      });
-    });
+    queryClient.setQueryData<InfiniteData<DataResult<Post[]>>>(
+      ['posts'],
+      (oldData) => {
+        if (!oldData) return;
+
+        const newPages = oldData.pages.map((page: DataResult<Post[]>) => ({
+          ...page,
+          data: page.data.map((post: Post) =>
+            post.id === updatedPost.id ? { ...post, ...updatedPost } : post,
+          ),
+        }));
+
+        return {
+          ...oldData,
+          pages: newPages,
+        };
+      },
+    );
   }
 
   if (isLoading) {
@@ -69,7 +87,7 @@ export const ListPosts = () => {
 
   return (
     <div className="flex flex-col gap-x-0.5 place-items-start justify-center container px-[1rem] py-4 ml-3">
-      {response?.pages.map((page) =>
+      {response?.pages.map((page: DataResult<Post[]>) =>
         page.data.map((post: Post) => (
           <PostCard key={post.id} post={post} onChange={onChange} />
         )),
@@ -84,7 +102,12 @@ export const ListPosts = () => {
             : 'Nothing more to load'
         }
         extraClasses="flex text-orange-800 gap-x-2 ml-0"
-        icon={<FontAwesomeIcon icon={faPlus} className="text-sm w-3" />}
+        icon={
+          <FontAwesomeIcon
+            icon={faPlus}
+            className={`text-sm w-3 ${!hasNextPage ? 'hidden' : ''}`}
+          />
+        }
         onClick={() => fetchNextPage()}
       />
     </div>

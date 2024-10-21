@@ -89,7 +89,6 @@ export const PostCard = ({
 
   const handleToggleLikeButton = async (e: FormEvent) => {
     e.preventDefault();
-
     if (onChange) {
       if (post.likedByUserBefore) {
         onChange({ id: post.id, likedByUserBefore: false });
