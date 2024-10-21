@@ -1,4 +1,4 @@
-import { FormEvent } from 'react';
+import { FormEvent, ReactNode } from 'react';
 
 export interface FormButtonProps {
   text: string;
@@ -14,4 +14,5 @@ export interface ShadowButtonProps {
   extraClasses?: string;
   href?: string;
   onClick?: (e: FormEvent) => void;
+  icon?: ReactNode;
 }

@@ -1,23 +1,40 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPlus,
+  faTriangleExclamation,
+} from '@fortawesome/free-solid-svg-icons';
 
-import { Post } from '@codersquare/shared/src/types';
-import { DataResult } from '@codersquare/shared';
+import { DataResult, Post } from '@codersquare/shared';
 import { getAllPosts } from '../../api';
-import { PostCard, Spinner } from '../../components';
+import { PostCard, ShadowButton, Spinner } from '../../components';
 import { ErrorPage } from '../error';
 
 export const ListPosts = () => {
-  const {
+  const queryClient = useQueryClient();
+
+  let {
     data: response,
     error,
+    fetchNextPage,
     isLoading,
-  } = useQuery<DataResult<Post[]>>({
-    queryKey: ['feed'],
-    queryFn: () => getAllPosts(localStorage.getItem('jwt') as string),
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<DataResult<Post[]>>({
+    queryKey: ['posts'],
+    queryFn: () =>
+      getAllPosts({
+        jwt: localStorage.getItem('jwt') as string,
+        cursor:
+          response?.pages[response.pages.length - 1].meta?.nextCursor ||
+          undefined,
+        cursorField: 'createdAt',
+        limit: 10,
+      }),
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage.meta?.nextCursor ?? null,
   });
-  const queryClient = useQueryClient();
 
   function onChange(updatedPost: Partial<Post>) {
     queryClient.setQueryData(['feed'], (posts: Post[]) => {
@@ -51,11 +68,25 @@ export const ListPosts = () => {
   }
 
   return (
-    <div className="flex flex-col  gap-x-0.5 place-items-start justify-center container px-[1rem] py-4">
-      {response.data &&
-        response.data.map((post: Post) => (
+    <div className="flex flex-col gap-x-0.5 place-items-start justify-center container px-[1rem] py-4 ml-3">
+      {response?.pages.map((page) =>
+        page.data.map((post: Post) => (
           <PostCard key={post.id} post={post} onChange={onChange} />
-        ))}
+        )),
+      )}
+
+      <ShadowButton
+        text={
+          isFetchingNextPage
+            ? 'more...'
+            : hasNextPage
+            ? 'More'
+            : 'Nothing more to load'
+        }
+        extraClasses="flex text-orange-800 gap-x-2 ml-0"
+        icon={<FontAwesomeIcon icon={faPlus} className="text-sm w-3" />}
+        onClick={() => fetchNextPage()}
+      />
     </div>
   );
 };

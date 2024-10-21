@@ -107,7 +107,7 @@ export const PostCard = ({
 
   return (
     <div className={parentDivClasses} key={post.id}>
-      <div className="top-layer flex items-center gap-x-2 mb-2">
+      <div className="top-layer flex items-center gap-x-2 mb-2 group">
         <Link to={`/post/${post.id}`} className="flex items-center gap-x-2">
           <FontAwesomeIcon
             icon={

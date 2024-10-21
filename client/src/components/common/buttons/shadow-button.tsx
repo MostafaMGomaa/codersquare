@@ -7,6 +7,7 @@ export const ShadowButton: React.FC<ShadowButtonProps> = ({
   extraClasses,
   href = '',
   onClick,
+  icon,
 }) => {
   return (
     <Link
@@ -17,7 +18,7 @@ export const ShadowButton: React.FC<ShadowButtonProps> = ({
       )} ${extraClasses}`}
       onClick={onClick}
     >
-      {text}
+      {icon} {text}
     </Link>
   );
 };
