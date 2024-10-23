@@ -13,6 +13,8 @@ export const SignupForm = () => {
     firstName: '',
     lastName: '',
     password: '',
+    about: '',
+    username: '',
   });
 
   const [searchParams] = useSearchParams();
@@ -48,10 +50,10 @@ export const SignupForm = () => {
   const inputClasses = `border border-gray-500 
           group-hover:border-orange-700 rounded bg-transparent h-9 w-[20rem] transition-colors duration-300 
           p-2 outline-none shadow-none focus:ring-0 focus:ring-transparent group-focus-within:border-orange-700`;
-  const labelClasses = `font-semibold w-40 group-hover:text-orange-700 text-gray-500 group-focus-within:text-orange-700`;
+  const labelClasses = `relative font-semibold w-40 group-hover:text-orange-700 text-gray-500 group-focus-within:text-orange-700`;
 
   return (
-    <div className="m-10 mt-24">
+    <div className="m-10 ml-18 mt-18">
       <form className="flex flex-col gap-10" onSubmit={handleSubmit}>
         <FormInput
           label="Email"
@@ -63,7 +65,6 @@ export const SignupForm = () => {
           inputClasses={inputClasses}
           labelClasses={labelClasses}
         />
-
         <FormInput
           label="First Name"
           type="text"
@@ -79,6 +80,15 @@ export const SignupForm = () => {
           value={signupData.lastName}
           onChange={handleSignupData}
           field="lastName"
+          labelClasses={labelClasses}
+          inputClasses={inputClasses}
+        />
+        <FormInput
+          label="Username"
+          type="text"
+          value={signupData.username}
+          onChange={handleSignupData}
+          field="username"
           labelClasses={labelClasses}
           inputClasses={inputClasses}
         />

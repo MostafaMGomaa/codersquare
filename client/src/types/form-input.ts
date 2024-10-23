@@ -7,4 +7,5 @@ export interface FormInputProps {
   inputClasses?: string;
   labelClasses?: string;
   parentDivClasses?: string;
+  isRequired?: boolean;
 }

@@ -1,8 +1,10 @@
 export interface SignupPayload {
   firstName: string;
   lastName: string;
+  username: string;
   email: string;
   password: string;
+  about: string;
 }
 
 export interface LoginPayload {
