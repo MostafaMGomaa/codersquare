@@ -46,7 +46,7 @@ export const ListPosts = () => {
 
   function onChange(updatedPost: Partial<Post>) {
     queryClient.setQueryData<InfiniteData<DataResult<Post[]>>>(
-      ['posts'],
+      ['feed'],
       (oldData) => {
         if (!oldData) return;
 

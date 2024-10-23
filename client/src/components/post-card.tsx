@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { twMerge } from 'tailwind-merge';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,6 +26,7 @@ export const PostCard = ({
   const [likesCount, setLikesCount] = useState<number>(post.likeCount);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const commentCount = `${post.commentCount} comments`;
   const createLikeMutation = useCreateLikeMutation();
   const deleteLikeMutation = useDeleteLikeMutation();
@@ -89,14 +90,18 @@ export const PostCard = ({
 
   const handleToggleLikeButton = async (e: FormEvent) => {
     e.preventDefault();
-    if (onChange) {
-      if (post.likedByUserBefore) {
-        onChange({ id: post.id, likedByUserBefore: false });
-        handleDisLikeButton();
-      } else {
-        onChange({ id: post.id, likedByUserBefore: true });
-        handleLikeButton();
+    if (localStorage.getItem('jwt')) {
+      if (onChange) {
+        if (post.likedByUserBefore) {
+          onChange({ id: post.id, likedByUserBefore: false });
+          handleDisLikeButton();
+        } else {
+          onChange({ id: post.id, likedByUserBefore: true });
+          handleLikeButton();
+        }
       }
+    } else {
+      navigate(`/signin?next=${location.pathname}`);
     }
   };
 
