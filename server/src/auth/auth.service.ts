@@ -24,7 +24,7 @@ export class AuthService {
    */
   async login(data: LoginDto): Promise<string> {
     const { email, password } = data;
-    const dbUser = await this.usersService.findOneByEmail(email);
+    const dbUser = await this.usersService.findOneByEmailOrUsername(email);
     if (!dbUser) {
       throw new ForbiddenException('Invalid email or password');
     }

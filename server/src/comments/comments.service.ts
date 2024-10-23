@@ -35,6 +35,7 @@ export class CommnetsService {
         'author.firstName',
         'author.lastName',
         'author.email',
+        'author.username',
       ]);
 
     strategy.applyCursor(query, cursor, orderType);

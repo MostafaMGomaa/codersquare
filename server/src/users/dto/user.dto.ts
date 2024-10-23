@@ -9,6 +9,10 @@ export class UserDto {
 
   email: string;
 
+  username: string;
+
+  about: string;
+
   @Exclude()
   password: string;
 }

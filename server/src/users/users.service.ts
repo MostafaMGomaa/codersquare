@@ -66,10 +66,19 @@ export class UsersService {
    * @returns {Promise<User>} - A user with that email.
    */
 
-  async findOneByEmail(email: string): Promise<User> {
+  async findOneByEmailOrUsername(email: string): Promise<User> {
     return await this.usersRepo.findOne({
-      where: { email },
-      select: ['id', 'firstName', 'lastName', 'email', 'password', 'createdAt'],
+      where: [{ email }, { username: email }],
+      select: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'password',
+        'createdAt',
+        'about',
+        'username',
+      ],
     });
   }
 }

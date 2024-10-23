@@ -17,8 +17,14 @@ export class User extends AbstractEntitiy {
   })
   email: string;
 
+  @Column({ unique: true })
+  username: string;
+
   @Column({ select: false })
   password: string;
+
+  @Column('text', { nullable: true })
+  about: string;
 
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
