@@ -53,7 +53,7 @@ export class PostsService {
             WHEN like.authorId = :userId THEN true
             ELSE false
           END`,
-          'post_likedByUserBefore',
+          'd_likedByUserBefore',
         )
         .setParameter('userId', userId);
     }
