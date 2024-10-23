@@ -33,14 +33,14 @@ export const PostCard = ({
 
   const commentClasses = twMerge(
     `px-6 py-[1px] ml-5 border border-gray-400 text-gray-400 rounded-md text-center text-sm
-          hover:bg-orange-700 hover:border-transparent hover:text-white`,
+          hover:bg-orange-700 hover:border-transparent hover:text-white group-hover:border-orange-700`,
     buttonClasses,
   );
   const parentDivClasses = twMerge('flex flex-col mb-7', divClasses);
 
   const getLikeButtonClasses = () => {
     const defaultClasses =
-      'like-btn text-gray-400 hover:text-orange-700 transition-colors duration-450';
+      'like-btn text-gray-400 hover:text-orange-700 transition-colors duration-450 group-hover:text-orange-700';
     return post.likedByUserBefore
       ? twMerge(defaultClasses, 'text-orange-700')
       : defaultClasses;
@@ -112,7 +112,7 @@ export const PostCard = ({
   return (
     <div className={parentDivClasses} key={post.id}>
       <div className="top-layer flex items-center gap-x-2 mb-2 group">
-        <Link to={`/post/${post.id}`} className="flex items-center gap-x-2">
+        <Link to={`/post/${post.id}`} className="flex items-center gap-x-2 ">
           <FontAwesomeIcon
             icon={
               isHover || post.likedByUserBefore ? faHeartSolid : faHeartRegular
@@ -122,7 +122,7 @@ export const PostCard = ({
             onClick={handleToggleLikeButton}
             className={getLikeButtonClasses()}
           />
-          <p className="font-bold text-gray-600 hover:text-orange-700 text-xl">
+          <p className="font-bold text-gray-600 hover:text-orange-700 text-xl group-hover:text-orange-700">
             {capitalizeFirstLetter(post.title)}
           </p>
         </Link>
