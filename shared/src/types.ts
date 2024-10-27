@@ -23,6 +23,8 @@ export interface User extends IAbstract {
   posts: Post[];
   likes: Like[];
   comments: Comment[];
+  username: string;
+  about: string;
 }
 
 export interface Comment extends IAbstract {

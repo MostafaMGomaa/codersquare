@@ -1,6 +1,6 @@
 export type EndpontConfigs = {
   url: string;
-  method: 'get' | 'post' | 'patch' | 'delete';
+  method: 'get' | 'post' | 'PATCH' | 'delete';
   auth?: boolean;
 };
 
@@ -29,6 +29,7 @@ export enum EndpointsUrl {
   /** Users */
   getMe = 'users/me',
   getUser = 'users/:id',
+  updateMe = 'users/me',
 }
 
 export enum Endpoints {
@@ -54,6 +55,7 @@ export enum Endpoints {
   /** User */
   getMe = 'getMe',
   getUser = 'getUser',
+  updateMe = 'updateMe',
 }
 
 export const ENDPOINTS_CONFIGS = {
@@ -119,6 +121,11 @@ export const ENDPOINTS_CONFIGS = {
   [Endpoints.getUser]: {
     method: 'get',
     url: EndpointsUrl.getUser,
+    auth: true,
+  },
+  [Endpoints.updateMe]: {
+    method: 'PATCH',
+    url: EndpointsUrl.updateMe,
     auth: true,
   },
 };
