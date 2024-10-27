@@ -5,6 +5,7 @@ import { User } from './users.entity';
 import { UserDto } from './dto';
 import { CreateUserDto } from 'src/auth/dto';
 import { plainToClass, plainToInstance } from 'class-transformer';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -80,5 +81,25 @@ export class UsersService {
         'username',
       ],
     });
+  }
+
+  /**
+   * Update non senstive user data by his id.
+   *
+   * @param {string} id - The updated user id.
+   * @param {UpdateUserDto} updatedData - The updated user data.
+   * @returns
+   */
+  async updateById(id: string, updatedData: UpdateUserDto): Promise<string> {
+    const { affected } = await this.usersRepo
+      .createQueryBuilder()
+      .update('users')
+      .set(updatedData)
+      .where('id = :id', { id })
+      .execute();
+
+    return affected === 1
+      ? "User's data updated successfully"
+      : "Falid to updated users's data";
   }
 }
