@@ -26,4 +26,7 @@ export class Comment extends AbstractEntitiy {
 
   @ManyToOne(() => CommentLike, (commentLike) => commentLike.comment)
   comment_likes: CommentLike[];
+
+  @Column({ default: false })
+  likedByUserBefore: boolean;
 }
