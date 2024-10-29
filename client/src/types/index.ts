@@ -6,3 +6,4 @@ export * from './likes';
 export * from './error';
 export * from './users';
 export * from './editable-field';
+export * from './posts';

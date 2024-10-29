@@ -68,10 +68,13 @@ export const ViewPost = () => {
     string | undefined
   >({
     queryKey: ['comments', id],
-    queryFn: () =>
+    queryFn: ({ pageParam }) =>
       listPostComments({
         jwt: localStorage.getItem('jwt') as string,
         postId: id,
+        cursor: pageParam,
+        cursorField: 'createdAt',
+        limit: 10,
       }),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => lastPage.meta?.nextCursor ?? null,
