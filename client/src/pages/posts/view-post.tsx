@@ -1,12 +1,23 @@
 import { useParams } from 'react-router-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  QueryKey,
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 import { Post, Comment, DataResult } from '@codersquare/shared';
-import { PostCard, CommentCard, AddButton, Spinner } from '../../components';
+import {
+  PostCard,
+  CommentCard,
+  AddButton,
+  Spinner,
+  MoreButton,
+} from '../../components';
 import { getOnePost, listPostComments } from '../../api';
-import { ListPostCommentsPayload } from '../../types';
 import { ErrorPage } from '../error';
 
 export const ViewPost = () => {
@@ -29,11 +40,6 @@ export const ViewPost = () => {
     );
   }
 
-  const listPostCommentsPayload: ListPostCommentsPayload = {
-    jwt: localStorage.getItem('jwt') as string,
-    postId: id,
-  };
-
   const {
     data: postData,
     error: postError,
@@ -51,9 +57,24 @@ export const ViewPost = () => {
     data: commentsResponse,
     error: commentsError,
     isLoading: commentsLoading,
-  } = useQuery<DataResult<Comment[]>>({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<
+    DataResult<Comment[]>,
+    Error,
+    InfiniteData<DataResult<Comment[]>>,
+    QueryKey,
+    string | undefined
+  >({
     queryKey: ['comments', id],
-    queryFn: () => listPostComments(listPostCommentsPayload),
+    queryFn: () =>
+      listPostComments({
+        jwt: localStorage.getItem('jwt') as string,
+        postId: id,
+      }),
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage) => lastPage.meta?.nextCursor ?? null,
   });
 
   if (postLoading || commentsLoading) {
@@ -85,7 +106,7 @@ export const ViewPost = () => {
       });
     });
   }
-
+  console.log({ commentsResponse });
   return (
     <>
       <PostCard
@@ -95,12 +116,24 @@ export const ViewPost = () => {
         onChange={onChange}
       />
 
-      {commentsResponse?.data &&
+      {/* {commentsResponse?.data &&
         commentsResponse!.data.map((comment: Comment) => (
           <CommentCard comment={comment} key={comment.id} />
-        ))}
+        ))} */}
+
+      {commentsResponse?.pages.map((page: DataResult<Comment[]>) => {
+        page.data.map((comment: Comment) => {
+          <CommentCard comment={comment} key={comment.id} />;
+        });
+      })}
 
       <AddButton postId={id} />
+
+      <MoreButton
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+      />
     </>
   );
 };
