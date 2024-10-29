@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { Comment } from '@codersquare/shared';
 import { getTimeAgo } from '../utils';
-import { Link } from 'react-router-dom';
 
 export const CommentCard = ({ comment }: { comment: Comment }) => {
   const [isHover, setIsHover] = useState(false);

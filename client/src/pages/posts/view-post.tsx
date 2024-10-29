@@ -80,6 +80,7 @@ export const ViewPost = () => {
   if (postLoading || commentsLoading) {
     return <Spinner />;
   }
+
   if (postError || commentsError) {
     return (
       <ErrorPage
@@ -97,16 +98,11 @@ export const ViewPost = () => {
   }
 
   function onChange(updatedPost: Partial<Post>) {
-    queryClient.setQueryData(['feed'], (posts: Post[]) => {
-      return posts.map((post: Post) => {
-        if (post.id === updatedPost.id) {
-          return { ...post, ...updatedPost };
-        }
-        return post;
-      });
+    queryClient.setQueryData(['post', id], (post: Post) => {
+      return { ...post, ...updatedPost };
     });
   }
-  console.log({ commentsResponse });
+
   return (
     <>
       <PostCard
@@ -116,14 +112,9 @@ export const ViewPost = () => {
         onChange={onChange}
       />
 
-      {/* {commentsResponse?.data &&
-        commentsResponse!.data.map((comment: Comment) => (
-          <CommentCard comment={comment} key={comment.id} />
-        ))} */}
-
       {commentsResponse?.pages.map((page: DataResult<Comment[]>) => {
-        page.data.map((comment: Comment) => {
-          <CommentCard comment={comment} key={comment.id} />;
+        return page.data.map((comment: Comment) => {
+          return <CommentCard comment={comment} key={comment.id} />;
         });
       })}
 
@@ -133,6 +124,7 @@ export const ViewPost = () => {
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
+        classes="m-10"
       />
     </>
   );
