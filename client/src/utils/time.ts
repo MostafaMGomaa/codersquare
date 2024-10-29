@@ -35,19 +35,19 @@ export function getTimeAgo(createdAt: Date): string {
   };
 
   if (timeUnits.years > 0) {
-    return formateDate(timeUnits.years, 'years');
+    return formateDate(timeUnits.years, 'year');
   } else if (timeUnits.months > 0) {
-    return formateDate(timeUnits.months, 'months');
+    return formateDate(timeUnits.months, 'month');
   } else if (timeUnits.weeks > 0) {
-    return formateDate(timeUnits.weeks, 'weeks');
+    return formateDate(timeUnits.weeks, 'week');
   } else if (timeUnits.days > 0) {
-    return formateDate(timeUnits.days, 'days');
+    return formateDate(timeUnits.days, 'day');
   } else if (timeUnits.hours > 0) {
-    return formateDate(timeUnits.hours, 'hours');
+    return formateDate(timeUnits.hours, 'hour');
   } else if (timeUnits.minutes > 0) {
-    return formateDate(timeUnits.minutes, 'minutes');
+    return formateDate(timeUnits.minutes, 'minute');
   } else {
-    return formateDate(timeUnits.seconds, 'seconds');
+    return formateDate(timeUnits.seconds, 'second');
   }
 }
 const formateDate = (unit: number, value: string): string =>
