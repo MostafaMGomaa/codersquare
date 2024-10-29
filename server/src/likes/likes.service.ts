@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 
 import { Like } from './likes.entitiy';
 import { LikeDto } from './dto';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class LikesService {
