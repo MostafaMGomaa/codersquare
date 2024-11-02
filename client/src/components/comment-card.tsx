@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
+import toast from 'react-hot-toast';
 import { InfiniteData, useQueryClient } from '@tanstack/react-query';
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Comment, DataResult } from '@codersquare/shared';
 import { getTimeAgo } from '../utils';
 import { useCreateCommentLikeMutation } from '../api';
-import toast from 'react-hot-toast';
+import { useDislikeComment } from '../api/comments/likes/dislike';
 
 export const CommentCard = ({ comment }: { comment: Comment }) => {
   const queryClient = useQueryClient();
@@ -18,7 +19,8 @@ export const CommentCard = ({ comment }: { comment: Comment }) => {
 
   const [isHover, setIsHover] = useState(false);
   const [likesCount, setLikesCount] = useState(comment.likesCount || 0);
-  const likeMuation = useCreateCommentLikeMutation(comment.postId);
+  const likeMutation = useCreateCommentLikeMutation(comment.postId);
+  const dislikeMutation = useDislikeComment(comment.postId);
 
   const username = comment.author.username;
   const jwt = localStorage.getItem('jwt') as string;
@@ -58,7 +60,7 @@ export const CommentCard = ({ comment }: { comment: Comment }) => {
     try {
       setLikesCount(likesCount + 1);
 
-      await likeMuation.mutateAsync({
+      await likeMutation.mutateAsync({
         commentId: comment.id,
         jwt,
       });
@@ -71,20 +73,32 @@ export const CommentCard = ({ comment }: { comment: Comment }) => {
       setLikesCount(likesCount - 1);
     }
   };
+  const handleDisLikeButton = async () => {
+    try {
+      setLikesCount(likesCount - 1);
+
+      await dislikeMutation.mutateAsync({
+        commentId: comment.id,
+        jwt,
+      });
+    } catch (err) {
+      const error = err instanceof Error ? err.message : 'Error while dilike';
+      toast.error(error, {
+        position: 'bottom-right',
+      });
+      setLikesCount(likesCount + 1);
+    }
+  };
+
   const handleToggleLikeButton = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (jwt) {
-      if (comment.likedByUserBefore) {
-        // onChange({ id: comment.id, likedByUserBefore: false });
-        console.log(`Dislike ${comment.id}`);
-        // handleDisLikeButton();
-      } else {
-        onChange({ id: comment.id, likedByUserBefore: true });
-        handleLikeButton();
-      }
+    if (comment.likedByUserBefore) {
+      onChange({ id: comment.id, likedByUserBefore: false });
+      handleDisLikeButton();
     } else {
-      navigate(`/signin?next=${location.pathname}`);
+      onChange({ id: comment.id, likedByUserBefore: true });
+      handleLikeButton();
     }
   };
 
