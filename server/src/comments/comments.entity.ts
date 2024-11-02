@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { AbstractEntitiy } from 'abstract.entity';
 import { User } from 'src/users/users.entity';
@@ -24,7 +24,7 @@ export class Comment extends AbstractEntitiy {
   @JoinColumn({ name: 'authorId' })
   author: User;
 
-  @ManyToOne(() => CommentLike, (commentLike) => commentLike.comment)
+  @OneToMany(() => CommentLike, (commentLike) => commentLike.comment)
   comment_likes: CommentLike[];
 
   @Column({ default: false })

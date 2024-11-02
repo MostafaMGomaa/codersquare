@@ -24,32 +24,23 @@ export class CommnetsService {
   async findAllByPostId(
     postId: string,
     paginateData: PaginationDto,
-    token?: string | null,
+    userId: string | null,
   ): Promise<DataResult<CommentDto[]>> {
     const { cursor, limit, strategy, orderType } = paginate(paginateData);
 
     let query = this.commentRepo
       .createQueryBuilder('d')
       .leftJoinAndSelect('d.author', 'author')
-      .where('d.postId = :postId', { postId });
-    // .loadRelationCountAndMap('d.likeCount', 'd.comment_likes');
-
-    if (token) {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.config.get<string>('JWT_SECRET'),
-      });
-
-      query
-        .leftJoin('d.comment_likes', 'comment_like')
-        .addSelect(
-          `CASE
-        WHEN comment_like.authorId = :userId THEN true
-        ELSE false
-        END`,
-          'd_likedByUserBefore',
-        )
-        .setParameter('userId', payload.id);
-    }
+      .where('d.postId = :postId', { postId })
+      .leftJoin('d.comment_likes', 'comment_like')
+      .addSelect(
+        `CASE
+          WHEN comment_like.authorId = :userId THEN true
+          ELSE false
+          END`,
+        'd_likedByUserBefore',
+      )
+      .setParameter('userId', userId || null);
 
     strategy.applyCursor(query, cursor, orderType);
 

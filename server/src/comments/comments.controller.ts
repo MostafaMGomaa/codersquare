@@ -40,9 +40,7 @@ export class CommentsController {
     @Query() query: PaginationDto,
     @Req() req,
   ) {
-    const token = req.headers.authorization?.split(' ')[1];
-
-    return this.commentsService.findAllByPostId(postId, query, token);
+    return this.commentsService.findAllByPostId(postId, query, req.user.id);
   }
 
   @Delete('/:id')
