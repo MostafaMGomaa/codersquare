@@ -22,6 +22,10 @@ export enum EndpointsUrl {
   listPostComments = 'comments/:id',
   deleteComment = 'comments/:id',
 
+  /** Comments Like */
+  createCommentLike = 'comments/:commentId/like',
+  dislikeComment = 'comments/:commentId/like',
+
   /** Likes */
   createLike = 'likes/:postId',
   deleteLike = 'likes/:postId',
@@ -47,6 +51,10 @@ export enum Endpoints {
   listPostComments = 'listPostComments',
   createComment = 'createComment',
   deleteComment = 'deleteComment',
+
+  /** Comments Like */
+  createCommentLike = 'createCommentLike',
+  dislikeComment = 'dislikeComment',
 
   /** Likes */
   createLike = 'createLike',
@@ -100,7 +108,7 @@ export const ENDPOINTS_CONFIGS = {
     auth: true,
   },
 
-  /** Likes */
+  /** Post Likes */
   [Endpoints.createLike]: {
     method: 'post',
     url: EndpointsUrl.createLike,
@@ -112,6 +120,17 @@ export const ENDPOINTS_CONFIGS = {
     auth: true,
   },
 
+  /** Comments Like */
+  [Endpoints.createCommentLike]: {
+    method: 'post',
+    url: EndpointsUrl.createCommentLike,
+    auth: true,
+  },
+  [Endpoints.dislikeComment]: {
+    method: 'delete',
+    url: EndpointsUrl.dislikeComment,
+    auth: true,
+  },
   /** User */
   [Endpoints.getMe]: {
     method: 'get',

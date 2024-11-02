@@ -32,6 +32,7 @@ export class CommnetsService {
       .createQueryBuilder('d')
       .leftJoinAndSelect('d.author', 'author')
       .where('d.postId = :postId', { postId })
+      .loadRelationCountAndMap('d.likesCount', 'd.comment_likes')
       .leftJoin('d.comment_likes', 'comment_like')
       .addSelect(
         `CASE

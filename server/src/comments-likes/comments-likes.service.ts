@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 import { CommentLike } from './comments-likes.entity';
 import { CommentLikeDto } from './dto';
+import { DataResult } from '@codersquare/shared';
 
 @Injectable()
 export class CommentLikesService {
@@ -12,15 +13,16 @@ export class CommentLikesService {
     private commentLikeRepo: Repository<CommentLike>,
   ) {}
 
-  async create(data: CommentLikeDto) {
-    await this.commentLikeRepo
+  async create(data: CommentLikeDto): Promise<DataResult<CommentLike>> {
+    const result = await this.commentLikeRepo
       .createQueryBuilder()
       .insert()
       .into(CommentLike)
       .values(data)
+      .returning('*')
       .execute();
 
-    return { data: { message: 'Comment liked successfully' } };
+    return { data: result.raw[0] };
   }
 
   async deleteById(commentId: string, authorId: string) {

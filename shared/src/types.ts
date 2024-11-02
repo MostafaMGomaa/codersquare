@@ -33,7 +33,8 @@ export interface Comment extends IAbstract {
   post: Post;
   authorId: string;
   author: User;
-  likeCount?: number;
+  likesCount?: number;
+  likedByUserBefore: boolean;
 }
 
 export interface Like extends IAbstract {

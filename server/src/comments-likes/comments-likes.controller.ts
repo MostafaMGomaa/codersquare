@@ -20,10 +20,13 @@ export class CommentLikesController {
 
   @Post('')
   async likeComment(@Param('commentId') commentId: string, @Req() req) {
+    //const data =
     return await this.commentLikesService.create({
       authorId: req.user.id,
       commentId,
     });
+
+    // return { data };
   }
 
   @Delete('')
