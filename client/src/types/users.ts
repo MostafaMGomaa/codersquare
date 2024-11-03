@@ -6,3 +6,8 @@ export interface UpdateMePayload {
 export interface UpdateMeResponse {
   message: string;
 }
+
+export interface GetUserByIdPayload {
+  jwt: string;
+  userId: string;
+}

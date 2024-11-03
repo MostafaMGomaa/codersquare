@@ -4,14 +4,16 @@ import { faPen, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface EditableFieldProps {
   initialText: string;
-  onSave: (text: string) => Promise<void>;
+  onSave?: (text: string) => Promise<void>;
   placeholder?: string;
+  isEditable?: boolean;
 }
 
 export const EditableField = ({
   initialText = '',
   onSave,
   placeholder,
+  isEditable = true,
 }: EditableFieldProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempText, setTempText] = useState(initialText);
@@ -25,7 +27,7 @@ export const EditableField = ({
 
     try {
       setIsLoading(true);
-      await onSave(tempText.trim());
+      await onSave!(tempText.trim());
       setIsEditing(false);
     } catch (error) {
       console.error(error);
@@ -47,7 +49,7 @@ export const EditableField = ({
     }
   };
 
-  if (isEditing) {
+  if (isEditable && isEditing) {
     return (
       <div className="flex gap-2 items-center">
         <input
