@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -17,5 +25,10 @@ export class UsersController {
   async updateMe(@Req() req, @Body() data: UpdateUserDto) {
     const message = await this.userService.updateById(req.user.id, data);
     return { message };
+  }
+
+  @Get('/:id')
+  async getById(@Param('id') userId: string) {
+    return this.userService.findOneById(userId);
   }
 }
