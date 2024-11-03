@@ -37,6 +37,7 @@ export class AuthService {
     const jwt = await this.generateToken({
       id: dbUser.id,
       email: dbUser.email,
+      username: dbUser.username,
     });
 
     return jwt;
@@ -62,6 +63,7 @@ export class AuthService {
     return this.generateToken({
       id: user.id,
       email: user.email,
+      username: user.username,
     });
   }
 
@@ -76,6 +78,7 @@ export class AuthService {
     const payload = {
       id: data.id,
       email: data.email,
+      username: data.username,
     };
 
     return await this.jwt.signAsync(payload, {
