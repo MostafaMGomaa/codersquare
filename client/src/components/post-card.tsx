@@ -135,8 +135,11 @@ export const PostCard = ({
       <div className="flex items-center mx-6 gap-x-2 text-xs text-gray-400">
         <span>{`${likesCount} likes`}</span>
         <span>|</span>
-        <Link to="#" className="font-semibold hover:text-orange-700">
-          {post.author.email.split('@')[0]}
+        <Link
+          to={`/users/${post.author.id}`}
+          className="font-semibold hover:text-orange-700"
+        >
+          {post.author.username}
         </Link>
         <span>|</span>
         <span>{getTimeAgo(post.createdAt)}</span>

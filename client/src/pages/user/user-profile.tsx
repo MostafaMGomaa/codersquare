@@ -1,4 +1,4 @@
-import { GetMeResponse, User } from '@codersquare/shared';
+import { User } from '@codersquare/shared';
 import { useQuery } from '@tanstack/react-query';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -90,7 +90,7 @@ export const EditableField = ({
         className="text-gray-400 opacity-0 group-hover:opacity-100 hover:text-gray-600 transition-opacity"
         title="Edit bio"
       >
-        <FontAwesomeIcon icon={faPen} className="w-3.5 h-3.5" />
+        {isEditable && <FontAwesomeIcon icon={faPen} className="w-3.5 h-3.5" />}
       </button>
     </div>
   );

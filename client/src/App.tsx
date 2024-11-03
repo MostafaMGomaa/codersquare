@@ -11,7 +11,7 @@ import {
   UserProfile,
 } from './pages';
 import { NavBar } from './components';
-import { CreatePost, ErrorPage } from './pages';
+import { CreatePost, ViewUser, ErrorPage } from './pages';
 import { ProtectedRoute } from './utils/protected-route';
 
 function App() {
@@ -28,6 +28,7 @@ function App() {
             <Route path="/post/:id" element={<ViewPost />} />
             <Route path="/post/create" element={<CreatePost />}></Route>
             <Route path="/me" element={<UserProfile />}></Route>
+            <Route path="/users/:id" element={<ViewUser />}></Route>
           </Route>
           <Route
             path="*"
