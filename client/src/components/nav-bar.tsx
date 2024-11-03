@@ -17,7 +17,7 @@ export const NavBar = () => {
 
   if (jwt && jwt !== '') {
     const decodedToken: JWTPayload = jwtDecode(jwt);
-    username = decodedToken.email.split('@')[0] || '';
+    username = decodedToken.username || '';
   }
 
   const handleSignoutOnChange = (e: FormEvent) => {
