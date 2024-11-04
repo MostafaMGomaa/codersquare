@@ -22,6 +22,8 @@ export class CommentLikesService {
       .returning('*')
       .execute();
 
+    // Notify the comment author (if the commentLike.authorId != commentLike.commentId)
+
     return { data: result.raw[0] };
   }
 

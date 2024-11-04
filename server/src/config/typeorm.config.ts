@@ -6,6 +6,7 @@ import { User } from 'src/users/users.entity';
 import { Like } from 'src/likes/likes.entitiy';
 import { Comment } from 'src/comments/comments.entity';
 import { CommentLike } from 'src/comments-likes/comments-likes.entity';
+import { Notification } from 'src/notifications/entities';
 
 export const getTypeOrmConfig = (
   config: ConfigService,
@@ -16,7 +17,7 @@ export const getTypeOrmConfig = (
   username: config.get<string>('DATABASE_USERNAME'),
   password: config.get<string>('DATABASE_PASSWORD'),
   database: config.get<string>('DATABASE_NAME'),
-  entities: [User, Post, Like, Comment, CommentLike],
+  entities: [User, Post, Like, Comment, CommentLike, Notification],
   synchronize: config.get<string>('NODE_ENV') === 'development',
   migrations: ['dist/migrations/*.js'],
   migrationsRun: true,

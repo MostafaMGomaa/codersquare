@@ -10,6 +10,7 @@ export class LikesService {
   constructor(@InjectRepository(Like) private likeRepo: Repository<Like>) {}
 
   async create(data: LikeDto) {
+    // Notify the post author (if the post.authorId != commentLike.postId)
     return this.likeRepo.save(data);
   }
 

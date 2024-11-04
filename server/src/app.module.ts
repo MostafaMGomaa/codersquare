@@ -11,6 +11,7 @@ import { PostsModule } from './posts/posts.module';
 import { LikesModule } from './likes/likes.module';
 import { CommentsModule } from './comments/comments.module';
 import { CommentLikesModule } from './comments-likes/comments-likes.module';
+import { NotificationModule } from './notifications/notification.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CommentLikesModule } from './comments-likes/comments-likes.module';
     LikesModule,
     CommentsModule,
     CommentLikesModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [

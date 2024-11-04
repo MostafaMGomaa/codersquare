@@ -18,6 +18,7 @@ export class CommnetsService {
   ) {}
 
   async create(data: CommentDto): Promise<CommentDto> {
+    // Notify the post author (if the comment.authorId != comment.postId)
     return this.commentRepo.save(data);
   }
 
