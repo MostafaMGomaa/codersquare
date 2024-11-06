@@ -6,7 +6,7 @@ import { NotificationPayload } from '../dto';
 
 @Injectable()
 export class NotificationService {
-  private observers: Observer[];
+  private observers: Observer[] = [];
 
   addObserver(observer: Observer) {
     this.observers.push(observer);

@@ -18,17 +18,17 @@ export class CommentNotificationService implements Observer {
 
   async update(
     type: NotificationType,
-    paylaod: NotificationPayload,
+    payload: NotificationPayload,
   ): Promise<void> {
     if (
       type == NotificationType.NEW_COMMENT ||
       type == NotificationType.NEW_LIKE_ON_COMMENT
     ) {
       this.notificationGateway.sendNotification(
-        paylaod.recipientId,
-        paylaod.message,
+        payload.recipientId,
+        payload.message,
       );
-      await this.notificationRepo.save(paylaod);
+      await this.notificationRepo.save(payload);
     }
   }
 }
