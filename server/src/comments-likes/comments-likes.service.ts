@@ -39,14 +39,19 @@ export class CommentLikesService {
       .select(['comment.postId', 'comment.authorId', 'author.username'])
       .getOne();
 
-    // Notify the post author in case he didn't the new comment like author.
+    if (!comment) {
+      throw new NotFoundException('Cannot find this comment');
+    }
+
     if (newCommentLike.authorId != comment.authorId) {
+      // Notify the post author in case he didn't the new comment like author.
       this.notificationService.notify(NotificationType.NEW_LIKE_ON_COMMENT, {
         userId: newCommentLike.authorId,
         recipientId: comment.authorId,
         message: `${comment.author.username} add new like on your comment`,
         type: NotificationType.NEW_LIKE_ON_COMMENT,
         commentId: newCommentLike.commentId,
+        postId: comment.postId,
       });
     }
 
