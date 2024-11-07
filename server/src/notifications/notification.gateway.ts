@@ -7,7 +7,6 @@ export class NotificationGateway {
   server: Server;
 
   sendNotification(userId: string, message: string, postId: string) {
-    console.log('Before emit the notification');
     this.server.emit('notification', { userId, message, postId });
   }
 }

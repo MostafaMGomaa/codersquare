@@ -33,7 +33,7 @@ export class CommnetsService {
 
     const newComment = await this.commentRepo.save(data);
 
-    // Notify the post author in case he didn't the new comment.
+    // Notify the post author in case he didn't the new comment author.
     if (newComment.authorId !== post.authorId) {
       this.notificationService.notify(NotificationType.NEW_COMMENT, {
         message: `${post.author.username} add a new comment on your post`,
