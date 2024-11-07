@@ -22,11 +22,11 @@ import { NotificationModule } from './notifications/notification.module';
     DatabaseModule,
     UsersModule,
     AuthModule,
+    NotificationModule,
     PostsModule,
     LikesModule,
     CommentsModule,
     CommentLikesModule,
-    NotificationModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { DataResult } from '@codersquare/shared';
@@ -19,8 +19,6 @@ export class CommnetsService {
   ) {}
 
   async create(data: CommentDto): Promise<CommentDto> {
-    // Notify the post author (if the comment.authorId != comment.postId)
-    // Get the post author by postId
     const post = await this.postRepo
       .createQueryBuilder('post')
       .where('post.id = :postId')
@@ -29,14 +27,23 @@ export class CommnetsService {
       .select(['post.id', 'post.authorId', 'author.username'])
       .getOne();
 
+    if (!post) {
+      throw new NotFoundException('Cannot find this post');
+    }
+
     const newComment = await this.commentRepo.save(data);
 
-    this.notificationService.notify(NotificationType.NEW_COMMENT, {
-      message: `USERNAME comment on ur post`,
-      recipientId: post.authorId,
-      userId: data.authorId,
-      commentId: newComment.id,
-    });
+    // Notify the post author in case he didn't the new comment.
+    if (newComment.authorId !== post.authorId) {
+      this.notificationService.notify(NotificationType.NEW_COMMENT, {
+        message: `${post.author.username} add a new comment on your post`,
+        recipientId: post.authorId,
+        userId: data.authorId,
+        commentId: newComment.id,
+        postId: post.id,
+        type: NotificationType.NEW_COMMENT,
+      });
+    }
 
     return newComment;
   }

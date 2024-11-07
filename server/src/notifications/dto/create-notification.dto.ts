@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
+import { NotificationType } from '../enums';
 
 export class NotificationPayload {
   @IsNotEmpty()
@@ -20,4 +27,8 @@ export class NotificationPayload {
   @IsNotEmpty()
   @IsString()
   message: string;
+
+  @IsNotEmpty()
+  @IsEnum(NotificationType)
+  type: NotificationType;
 }

@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { Notification } from './entities';
@@ -8,26 +8,18 @@ import {
   PostNotificationService,
 } from './services';
 import { NotificationGateway } from './notification.gateway';
-
 @Module({
   imports: [TypeOrmModule.forFeature([Notification])],
   providers: [
-    CommentNotificationService,
     NotificationService,
+    CommentNotificationService,
     PostNotificationService,
     NotificationGateway,
   ],
-  exports: [NotificationService],
+  exports: [
+    NotificationService,
+    PostNotificationService,
+    CommentNotificationService,
+  ],
 })
-export class NotificationModule implements OnModuleInit {
-  constructor(
-    private notificationService: NotificationService,
-    private commentNotificationService: CommentNotificationService,
-    private postNotificationService: PostNotificationService,
-  ) {}
-
-  onModuleInit() {
-    this.notificationService.addObserver(this.postNotificationService);
-    this.notificationService.addObserver(this.commentNotificationService);
-  }
-}
+export class NotificationModule {}
