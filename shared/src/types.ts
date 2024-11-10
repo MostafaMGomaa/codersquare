@@ -45,7 +45,9 @@ export interface Like extends IAbstract {
 }
 export interface Notification extends IAbstract {
   recipientId: string;
+  recipient: User;
   userId: string;
+  user: User;
   type: string;
   message: string;
   postId: string;
