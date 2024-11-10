@@ -40,7 +40,6 @@ export class NotificationService implements OnApplicationBootstrap {
     const data = await this.notificationRepo
       .createQueryBuilder('notification')
       .where('notification.recipientId=:userId', { userId })
-      .leftJoinAndSelect('notification.user', 'user')
       .limit(5)
       .getMany();
 
