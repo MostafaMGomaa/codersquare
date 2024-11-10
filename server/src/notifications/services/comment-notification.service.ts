@@ -28,6 +28,7 @@ export class CommentNotificationService implements Observer {
         payload.recipientId,
         payload.message,
         payload.postId,
+        type,
       );
       await this.notificationRepo.save(payload);
     }

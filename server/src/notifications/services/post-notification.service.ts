@@ -25,6 +25,7 @@ export class PostNotificationService implements Observer {
         payload.recipientId,
         payload.message,
         payload.postId,
+        type,
       );
       await this.notificationRepo.save(payload);
     }
