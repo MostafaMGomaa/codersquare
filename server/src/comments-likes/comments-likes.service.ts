@@ -20,15 +20,21 @@ export class CommentLikesService {
   ) {}
 
   async create(data: CommentLikeDto): Promise<DataResult<CommentLike>> {
-    const result = await this.commentLikeRepo
+    const newCommentLike = await this.commentLikeRepo
       .createQueryBuilder()
       .insert()
       .into(CommentLike)
       .values(data)
       .returning('*')
-      .execute();
+      .execute()
+      .then((result) =>
+        this.commentLikeRepo
+          .createQueryBuilder('commentLike')
+          .leftJoinAndSelect('commentLike.author', 'author')
+          .where('commentLike.id = :id', { id: result.raw[0].id })
+          .getOne(),
+      );
 
-    const newCommentLike = result.raw[0];
     // Notify the comment author (if the commentLike.authorId != commentLike.commentId)
     const comment = await this.commentRepo
       .createQueryBuilder('comment')
