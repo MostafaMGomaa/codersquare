@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import {
   faBell,
+  faComment,
+  faThumbsUp,
   faTriangleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,13 +25,12 @@ export const Notification = () => {
   } = useQuery<DataResult<INotification[]>>({
     queryKey: ['notification'],
     queryFn: () => getUserNotifications(jwt),
-    enabled: false, // Fetch only when triggered
+    enabled: false,
   });
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => {
       if (!prev) {
-        // Fetch notifications only when opening the dropdown
         refetch();
       }
       return !prev;
@@ -62,15 +63,24 @@ export const Notification = () => {
               }
             />
           ) : (
-            <div className="flex flex-col p-2">
+            <div className="flex flex-col p-2 gap-2">
               {response?.data.map(
                 (notification: INotification, index: number) => (
                   <Link
-                    to="#"
+                    to={`post/${notification.postId}`}
                     key={index}
-                    className="p-3 text-gray-600 hover:bg-gray-100 hover:text-orange-800 rounded-lg transition-all duration-200 cursor-pointer"
+                    className="flex items-center  gap-2 p-3 text-gray-600 hover:bg-gray-100 hover:text-orange-800 rounded-lg transition-all duration-200 cursor-pointer"
+                    onClick={() => setIsDropdownOpen(false)}
                   >
-                    {notification.message}
+                    <FontAwesomeIcon
+                      icon={
+                        notification.type === 'NEW_COMMENT'
+                          ? faComment
+                          : faThumbsUp
+                      }
+                      className="flex content-center justify-center text-lg"
+                    />
+                    <span> {notification.message}</span>
                   </Link>
                 ),
               )}
