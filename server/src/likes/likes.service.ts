@@ -18,10 +18,23 @@ export class LikesService {
 
   async create(data: LikeDto) {
     // Notify the post author (if the post.authorId != like.postId)
-    const newPostLike = await this.likeRepo.save(data);
+    const newPostLike = await this.likeRepo
+      .createQueryBuilder('postLike')
+      .insert()
+      .into(Like)
+      .values(data)
+      .execute()
+      .then((result) =>
+        this.likeRepo
+          .createQueryBuilder('postLike')
+          .leftJoinAndSelect('postLike.author', 'author')
+          .where('postLike.id = :id', { id: result.raw[0].id })
+          .getOne(),
+      );
+
     const post = await this.postRepo
       .createQueryBuilder('post')
-      .where('id = :postId', { postId: newPostLike.postId })
+      .where('post.id = :postId', { postId: newPostLike.postId })
       .leftJoin('post.author', 'author')
       .select(['post.authorId', 'post.id', 'author.username'])
       .getOne();
