@@ -15,8 +15,7 @@ export const FormButton: React.FC<FormButtonProps> = ({
       type="submit"
       disabled={disabled}
       className={twMerge(
-        `bg-orange-700 hover:bg-orange-900 text-white text-center font-bold py-2 px-4 rounded-md 
-        transition-transform duration-400 w-[6rem] ml-40 `,
+        'bg-orange-700 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded-md w-24 ml-8 transition-transform duration-300',
         classes,
       )}
       onClick={handleOnClick}

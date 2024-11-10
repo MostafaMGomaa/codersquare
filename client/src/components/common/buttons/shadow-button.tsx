@@ -12,10 +12,10 @@ export const ShadowButton: React.FC<ShadowButtonProps> = ({
   return (
     <Link
       to={href}
-      className={`${twMerge(
-        'flex place-items-center mx-4 text-gray-500 font-semibold text-center hover:text-gray-800 transition-colors duration-300',
+      className={twMerge(
+        'flex items-center gap-x-2 px-3 py-2 text-gray-500 font-semibold text-center hover:text-gray-800 transition-colors duration-300 rounded-md',
         extraClasses,
-      )} ${extraClasses}`}
+      )}
       onClick={onClick}
     >
       {icon} {text}

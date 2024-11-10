@@ -2,7 +2,7 @@ import { FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
-import { FormButton, ShadowButton } from './common';
+import { FormButton, Notification, ShadowButton } from './common';
 import { JWTPayload } from '../types';
 import LOGO from '../assets/logo.svg';
 
@@ -10,9 +10,7 @@ export const NavBar = () => {
   const navigate = useNavigate();
   const jwt = localStorage.getItem('jwt') || '';
   const [searchParams] = useSearchParams();
-
   const nextPage = searchParams.get('next') || '';
-
   let username = '';
 
   if (jwt && jwt !== '') {
@@ -32,13 +30,13 @@ export const NavBar = () => {
   };
 
   return (
-    <div className="flex justify-between items-center m-4 navbar">
-      <Link to="/" className="h-2 min-h-10 min-w-[200px]">
-        <img src={LOGO} alt="Logo" className="min-h-10" />
+    <div className="flex justify-between items-center p-4">
+      <Link to="/" className="h-10">
+        <img src={LOGO} alt="Logo" className="h-full" />
       </Link>
 
       {localStorage.getItem('jwt') ? (
-        <div className="flex">
+        <div className="flex items-center gap-x-4">
           <FormButton
             text="New Post"
             pendingText="New Post"
@@ -47,16 +45,16 @@ export const NavBar = () => {
           />
 
           <ShadowButton text={`${username} (9)`} href="/me" />
-
+          <Notification />
           <ShadowButton text="Sign out" onClick={handleSignoutOnChange} />
         </div>
       ) : (
-        <div className="flex auth-buttons">
+        <div className="flex gap-x-4">
           <ShadowButton text="Sign in" href={`/signin?next=${nextPage}`} />
 
           <Link
             to={`/signup?next=${nextPage}`}
-            className="bg-orange-700 hover:bg-orange-800 text-white text-center font-bold py-2 px-4 rounded-md transition-transform duration-400 "
+            className="bg-orange-700 hover:bg-orange-800 text-white font-bold py-2 px-4 rounded-md transition-transform duration-400"
           >
             Sign up
           </Link>
