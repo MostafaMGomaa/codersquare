@@ -40,6 +40,7 @@ export class NotificationService implements OnApplicationBootstrap {
     const data = await this.notificationRepo
       .createQueryBuilder('notification')
       .where('notification.recipientId=:userId', { userId })
+      .orderBy('created_at', 'DESC')
       .limit(5)
       .getMany();
 
