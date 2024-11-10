@@ -10,7 +10,10 @@ import { NotificationService } from 'src/notifications/services';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Like, Post]), NotificationModule],
-  providers: [LikesService, NotificationService],
+  providers: [
+    LikesService,
+    // NotificationService
+  ],
   controllers: [LikesController],
 })
 export class LikesModule {}

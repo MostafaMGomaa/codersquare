@@ -13,7 +13,10 @@ import { Comment } from 'src/comments/comments.entity';
     TypeOrmModule.forFeature([CommentLike, Comment]),
     NotificationModule,
   ],
-  providers: [CommentLikesService, NotificationService],
+  providers: [
+    CommentLikesService,
+    // NotificationService
+  ],
   controllers: [CommentLikesController],
 })
 export class CommentLikesModule {}

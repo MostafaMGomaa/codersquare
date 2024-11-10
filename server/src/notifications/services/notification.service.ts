@@ -1,10 +1,14 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { Observer } from '../interfaces';
 import { NotificationType } from '../enums';
 import { NotificationPayload } from '../dto';
 import { PostNotificationService } from './post-notification.service';
 import { CommentNotificationService } from './comment-notification.service';
+import { Notification } from '../entities';
+import { DataResult } from '@codersquare/shared';
 
 @Injectable()
 export class NotificationService implements OnApplicationBootstrap {
@@ -13,6 +17,8 @@ export class NotificationService implements OnApplicationBootstrap {
   constructor(
     private postNotificationService: PostNotificationService,
     private commentNotificationService: CommentNotificationService,
+    @InjectRepository(Notification)
+    private readonly notificationRepo: Repository<Notification>,
   ) {}
 
   onApplicationBootstrap() {
@@ -26,5 +32,18 @@ export class NotificationService implements OnApplicationBootstrap {
 
   notify(type: NotificationType, payload: NotificationPayload) {
     this.observers.forEach((observer) => observer.update(type, payload));
+  }
+
+  async findUserNotification(
+    userId: string,
+  ): Promise<DataResult<Notification[]>> {
+    const data = await this.notificationRepo
+      .createQueryBuilder('notification')
+      .where('notification.recipientId=:userId', { userId })
+      .leftJoinAndSelect('notification.user', 'user')
+      .limit(5)
+      .getMany();
+
+    return { data };
   }
 }

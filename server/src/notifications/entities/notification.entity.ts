@@ -1,13 +1,21 @@
 import { AbstractEntitiy } from 'abstract.entity';
-import { Column, Entity } from 'typeorm';
+import { User } from 'src/users/users.entity';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('notification')
 export class Notification extends AbstractEntitiy {
   @Column()
   recipientId: string;
+  @ManyToOne(() => User, (user) => user.sentNotifications)
+  @JoinColumn({ name: 'recipientId' })
+  recipient: User;
 
+  /** The user who make the event */
   @Column()
   userId: string;
+  @ManyToOne(() => User, (user) => user.notifications)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
   @Column()
   type: string;

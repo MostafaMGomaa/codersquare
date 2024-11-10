@@ -10,7 +10,10 @@ import { Post } from 'src/posts/posts.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Comment, Post]), NotificationModule],
-  providers: [CommnetsService, NotificationService],
+  providers: [
+    CommnetsService,
+    // NotificationService
+  ],
   controllers: [CommentsController],
 })
 export class CommentsModule {}

@@ -4,6 +4,7 @@ import { Post } from 'src/posts/posts.entity';
 import { Like } from 'src/likes/likes.entitiy';
 import { Comment } from 'src/comments/comments.entity';
 import { CommentLike } from 'src/comments-likes/comments-likes.entity';
+import { Notification } from 'src/notifications/entities';
 
 @Entity({ name: 'users' })
 export class User extends AbstractEntitiy {
@@ -38,4 +39,10 @@ export class User extends AbstractEntitiy {
 
   @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
+
+  @OneToMany(() => Notification, (notification) => notification.recipient)
+  notifications: Notification[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  sentNotifications: Notification[];
 }

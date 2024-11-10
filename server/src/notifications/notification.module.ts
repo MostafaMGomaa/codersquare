@@ -8,6 +8,7 @@ import {
   PostNotificationService,
 } from './services';
 import { NotificationGateway } from './notification.gateway';
+import { NotificationController } from './notification.controller';
 @Module({
   imports: [TypeOrmModule.forFeature([Notification])],
   providers: [
@@ -16,6 +17,7 @@ import { NotificationGateway } from './notification.gateway';
     PostNotificationService,
     NotificationGateway,
   ],
+  controllers: [NotificationController],
   exports: [
     NotificationService,
     PostNotificationService,
