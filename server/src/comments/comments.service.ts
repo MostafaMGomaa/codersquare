@@ -23,16 +23,26 @@ export class CommnetsService {
       .createQueryBuilder('post')
       .where('post.id = :postId')
       .setParameter('postId', data.postId)
-      .leftJoinAndSelect('post.author', 'author')
-      .select(['post.id', 'post.authorId', 'author.username'])
+      .select(['post.id', 'post.authorId'])
       .getOne();
 
     if (!post) {
       throw new NotFoundException('Cannot find this post');
     }
 
-    const newComment = await this.commentRepo.save(data);
-
+    const newComment = await this.commentRepo
+      .createQueryBuilder('comment')
+      .insert()
+      .values(data)
+      .returning('*')
+      .execute()
+      .then((result) =>
+        this.commentRepo
+          .createQueryBuilder('comment')
+          .leftJoinAndSelect('comment.author', 'author')
+          .where('comment.id = :id', { id: result.raw[0].id })
+          .getOne(),
+      );
     // Notify the post author in case he didn't the new comment author.
     if (newComment.authorId !== post.authorId) {
       this.notificationService.notify(NotificationType.NEW_COMMENT, {
