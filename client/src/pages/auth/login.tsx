@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { FormButton, FormInput } from '../../components';
 import { useLoginMutation } from '../../api/auth';
 import { LoginPayload } from '../../types';
-import { FormLink } from '../../components/common/form-link';
+import { FormLink } from '../../components';
 
 export const LoginForm = () => {
   const [loginData, setLoginData] = useState<LoginPayload>({

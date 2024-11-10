@@ -3,9 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { useSignupMutation } from '../../api';
-import { FormButton, FormInput } from '../../components';
+import { FormButton, FormInput, FormLink } from '../../components';
 import { SignupPayload } from '../../types';
-import { FormLink } from '../../components/common/form-link';
 
 export const SignupForm = () => {
   const [signupData, setSignupData] = useState<SignupPayload>({

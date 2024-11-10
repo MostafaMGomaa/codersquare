@@ -1,4 +1,3 @@
 export * from './buttons';
 export * from './spinner';
-export * from './form-input';
-export * from './editable-field';
+export * from './form';

@@ -1,5 +1,5 @@
-import { FormInputProps } from '../../types';
-import { RedAsterisk } from './red-asterisk';
+import { FormInputProps } from '../../../types';
+import { RedAsterisk } from '../red-asterisk';
 
 export const FormInput: React.FC<FormInputProps> = ({
   label,
