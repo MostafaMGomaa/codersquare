@@ -36,7 +36,7 @@ export class CommnetsService {
     // Notify the post author in case he didn't the new comment author.
     if (newComment.authorId !== post.authorId) {
       this.notificationService.notify(NotificationType.NEW_COMMENT, {
-        message: `${post.author.username} add a new comment on your post`,
+        message: `${newComment.author.username} add a new comment on your post`,
         recipientId: post.authorId,
         userId: data.authorId,
         commentId: newComment.id,

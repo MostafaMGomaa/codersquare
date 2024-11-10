@@ -32,7 +32,7 @@ export class LikesService {
 
     if (post.authorId !== newPostLike.authorId) {
       this.notificationService.notify(NotificationType.NEW_LIKE_ON_POST, {
-        message: `${post.author.username} add new like on your post`,
+        message: `${newPostLike.author.username} add new like on your post`,
         recipientId: post.authorId,
         type: NotificationType.NEW_LIKE_ON_POST,
         userId: newPostLike.authorId,

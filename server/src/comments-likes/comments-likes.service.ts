@@ -48,7 +48,7 @@ export class CommentLikesService {
       this.notificationService.notify(NotificationType.NEW_LIKE_ON_COMMENT, {
         userId: newCommentLike.authorId,
         recipientId: comment.authorId,
-        message: `${comment.author.username} add new like on your comment`,
+        message: `${newCommentLike.author.username} add new like on your comment`,
         type: NotificationType.NEW_LIKE_ON_COMMENT,
         commentId: newCommentLike.commentId,
         postId: comment.postId,
