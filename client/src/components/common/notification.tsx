@@ -12,6 +12,7 @@ import { DataResult, Notification as INotification } from '@codersquare/shared';
 import { getUserNotifications } from '../../api';
 import { ErrorPage } from '../../pages';
 import { Spinner } from './spinner';
+import { getTimeAgo } from '../../utils';
 
 export const Notification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -69,7 +70,7 @@ export const Notification = () => {
                   <Link
                     to={`post/${notification.postId}`}
                     key={index}
-                    className="flex items-center  gap-2 p-3 text-gray-600 hover:bg-gray-100 hover:text-orange-800 rounded-lg transition-all duration-200 cursor-pointer"
+                    className="flex items-center gap-3 p-3 text-gray-600 hover:bg-gray-100 hover:text-orange-800 rounded-lg transition-all duration-200 cursor-pointer"
                     onClick={() => setIsDropdownOpen(false)}
                   >
                     <FontAwesomeIcon
@@ -78,9 +79,14 @@ export const Notification = () => {
                           ? faComment
                           : faThumbsUp
                       }
-                      className="flex content-center justify-center text-lg"
+                      className="flex content-center justify-center text-xl"
                     />
-                    <span> {notification.message}</span>
+                    <span className="flex flex-col flex-grow">
+                      <p className="flex"> {notification.message}</p>
+                      <p className="flex justify-end items-end text-gray-400 text-xs">
+                        {getTimeAgo(notification.createdAt)}
+                      </p>
+                    </span>
                   </Link>
                 ),
               )}
