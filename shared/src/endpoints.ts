@@ -26,7 +26,7 @@ export enum EndpointsUrl {
   createCommentLike = 'comments/:commentId/like',
   dislikeComment = 'comments/:commentId/like',
 
-  /** Likes */
+  /** Posts Like */
   createLike = 'likes/:postId',
   deleteLike = 'likes/:postId',
 
@@ -34,6 +34,9 @@ export enum EndpointsUrl {
   getMe = 'users/me',
   getUser = 'users/:id',
   updateMe = 'users/me',
+
+  /** Notification */
+  getUserNotification = 'notifications/',
 }
 
 export enum Endpoints {
@@ -64,6 +67,9 @@ export enum Endpoints {
   getMe = 'getMe',
   getUser = 'getUser',
   updateMe = 'updateMe',
+
+  /** Notification */
+  getUserNotification = 'getUserNotification',
 }
 
 export const ENDPOINTS_CONFIGS = {
@@ -145,6 +151,13 @@ export const ENDPOINTS_CONFIGS = {
   [Endpoints.updateMe]: {
     method: 'PATCH',
     url: EndpointsUrl.updateMe,
+    auth: true,
+  },
+
+  /** Notification */
+  [Endpoints.getUserNotification]: {
+    method: 'get',
+    url: EndpointsUrl.getUserNotification,
     auth: true,
   },
 };

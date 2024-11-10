@@ -43,3 +43,12 @@ export interface Like extends IAbstract {
   postId: string;
   post: Post;
 }
+export interface Notification extends IAbstract {
+  recipientId: string;
+  userId: string;
+  type: string;
+  message: string;
+  postId: string;
+  commentId: string;
+  isRead: boolean;
+}
