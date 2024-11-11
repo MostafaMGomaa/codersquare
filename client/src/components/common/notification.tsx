@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   faBell,
   faComment,
@@ -12,10 +12,14 @@ import { DataResult, Notification as INotification } from '@codersquare/shared';
 import { getUserNotifications } from '../../api';
 import { ErrorPage } from '../../pages';
 import { Spinner } from './spinner';
-import { getTimeAgo } from '../../utils';
+import { getTimeAgo, initSocket, disconnectSocket } from '../../utils';
 
 export const Notification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [realTimeNotifications, setRealTimeNotifications] = useState<
+    INotification[]
+  >([]);
+
   const jwt = localStorage.getItem('jwt') as string;
 
   const {
@@ -37,6 +41,19 @@ export const Notification = () => {
       return !prev;
     });
   };
+
+  useEffect(() => {
+    if (jwt) {
+      const socket = initSocket();
+      socket?.on('notification', (data: INotification) => {
+        setRealTimeNotifications((prev) => [...prev, data]);
+        // Invalidat the query
+      });
+    }
+    return () => {
+      disconnectSocket();
+    };
+  }, [jwt]);
 
   return (
     <div className="relative">
