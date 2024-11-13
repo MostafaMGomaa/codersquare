@@ -13,19 +13,19 @@ import { TypeormExceptionFilter } from 'src/common';
 @Controller('auth')
 @UseFilters(TypeormExceptionFilter)
 export class AuthController {
-  constructor(private auhtService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('signup')
   async singup(@Body() data: CreateUserDto) {
-    const token = await this.auhtService.singup(data);
+    const token = await this.authService.singup(data);
     return { data: { token } };
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Body() data: LoginDto) {
-    const token = await this.auhtService.login(data);
-    return { data: { token } };
+    const response = await this.authService.login(data);
+    return response;
   }
 }

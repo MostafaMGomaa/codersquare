@@ -22,9 +22,12 @@ export interface User extends IAbstract {
   password: string;
   posts: Post[];
   likes: Like[];
+  comment_likes: CommentLike[];
   comments: Comment[];
   username: string;
   about: string;
+  notifications: Notification[];
+  sentNotifications: Notification[];
 }
 
 export interface Comment extends IAbstract {
@@ -42,6 +45,12 @@ export interface Like extends IAbstract {
   author: User;
   postId: string;
   post: Post;
+}
+export interface CommentLike extends IAbstract {
+  commentId: string;
+  comment: Comment;
+  authorId: string;
+  author: User;
 }
 export interface Notification extends IAbstract {
   recipientId: string;

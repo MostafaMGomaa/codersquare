@@ -16,9 +16,8 @@ import { getTimeAgo, initSocket, disconnectSocket } from '../../utils';
 
 export const Notification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [realTimeNotifications, setRealTimeNotifications] = useState<
-    INotification[]
-  >([]);
+  const [realTimeNotifications, setRealTimeNotifications] =
+    useState<INotification | null>(null);
 
   const jwt = localStorage.getItem('jwt') as string;
 
@@ -46,8 +45,9 @@ export const Notification = () => {
     if (jwt) {
       const socket = initSocket();
       socket?.on('notification', (data: INotification) => {
-        setRealTimeNotifications((prev) => [...prev, data]);
-        // Invalidat the query
+        console.log({ data });
+        // setRealTimeNotifications((prev) => [...prev, data]);
+        // Invalidate the query
       });
     }
     return () => {

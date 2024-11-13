@@ -3,6 +3,7 @@ import { Like, Post, User } from './types';
 export interface SignupResponse {
   data: {
     token: string;
+    user: Partial<User>;
   };
 }
 

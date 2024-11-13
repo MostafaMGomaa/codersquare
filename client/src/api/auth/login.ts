@@ -45,7 +45,7 @@ export const useLoginMutation = (): UseMutationResult<
     mutationFn: (LoginPayload: LoginPayload) => login(LoginPayload),
     onSuccess: (responseData: LoginResponse) => {
       localStorage.setItem('jwt', responseData.data.token);
-
+      localStorage.setItem('user', JSON.stringify(responseData.data.user));
       return;
     },
     onError: (error: Error) => {

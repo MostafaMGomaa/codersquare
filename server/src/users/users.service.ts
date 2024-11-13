@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './users.entity';
 import { UserDto } from './dto';
 import { CreateUserDto } from 'src/auth/dto';
-import { plainToClass, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
@@ -67,8 +67,8 @@ export class UsersService {
    * @returns {Promise<User>} - A user with that email.
    */
 
-  async findOneByEmailOrUsername(email: string): Promise<User> {
-    return await this.usersRepo.findOne({
+  async findOneByEmailOrUsername(email: string): Promise<UserDto> {
+    return this.usersRepo.findOne({
       where: [{ email }, { username: email }],
       select: [
         'id',

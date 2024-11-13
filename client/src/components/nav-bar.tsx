@@ -1,26 +1,27 @@
 import { FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { User } from '@codersquare/shared';
 
 import { FormButton, Notification, ShadowButton } from './common';
-import { JWTPayload } from '../types';
 import LOGO from '../assets/logo.svg';
 
 export const NavBar = () => {
   const navigate = useNavigate();
   const jwt = localStorage.getItem('jwt') || '';
+  const user =
+    (JSON.parse(localStorage.getItem('user') as string) as Partial<User>) || {};
   const [searchParams] = useSearchParams();
   const nextPage = searchParams.get('next') || '';
   let username = '';
 
   if (jwt && jwt !== '') {
-    const decodedToken: JWTPayload = jwtDecode(jwt);
-    username = decodedToken.username || '';
+    username = user.username || '';
   }
 
   const handleSignoutOnChange = (e: FormEvent) => {
     e.preventDefault();
     localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
     navigate('/');
   };
 

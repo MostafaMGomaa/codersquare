@@ -42,9 +42,9 @@ export const useSignupMutation = (): UseMutationResult<
 > => {
   return useMutation<SignupResponse, Error, SignupPayload>({
     mutationFn: (signupPayload: SignupPayload) => signup(signupPayload),
-    onSuccess: (reponseData: SignupResponse) => {
-      localStorage.setItem('jwt', reponseData.data.token);
-
+    onSuccess: (responseData: SignupResponse) => {
+      localStorage.setItem('jwt', responseData.data.token);
+      localStorage.setItem('user', JSON.stringify(responseData.data.user));
       return;
     },
     onError: (error: Error) => {
