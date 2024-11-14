@@ -22,7 +22,9 @@ export const getAllPosts = async (
     headers['Authorization'] = `Bearer ${jwt}`;
   }
 
-  let url = `${HOST}${ENDPOINTS_CONFIGS[Endpoints.listPosts].url}?limit=10`;
+  let url = `${HOST}${
+    ENDPOINTS_CONFIGS[Endpoints.listPosts].url
+  }?limit=${limit}`;
 
   if (cursor && cursorField) {
     url = `${url}&cursor=${cursor}&cursorField=${cursorField}`;
