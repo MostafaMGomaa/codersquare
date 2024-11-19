@@ -14,6 +14,7 @@ import { DataResult, Post } from '@codersquare/shared';
 import { getAllPosts } from '../../api';
 import { PostCard, ShadowButton, Spinner } from '../../components';
 import { ErrorPage } from '../error';
+import { useMemo } from 'react';
 
 export const ListPosts = () => {
   const queryClient = useQueryClient();
@@ -38,11 +39,16 @@ export const ListPosts = () => {
         jwt: localStorage.getItem('jwt') as string,
         cursor: pageParam,
         cursorField: 'createdAt',
-        limit: 10,
+        limit: 1,
       }),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => lastPage.meta?.nextCursor ?? null,
   });
+
+  const posts = useMemo(
+    () => response?.pages.reduce((res) => res.data),
+    [response],
+  );
 
   function onChange(updatedPost: Partial<Post>) {
     queryClient.setQueryData<InfiniteData<DataResult<Post[]>>>(

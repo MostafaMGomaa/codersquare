@@ -14,6 +14,11 @@ export class NotificationGateway
   @WebSocketServer()
   server: Server;
 
+  // TODO:
+  // afterInit(server: Server) {
+  //   server.use()
+  // }
+
   handleConnection(client: Socket) {
     const userId =
       client.handshake.auth.userId || client.handshake.query.userId;
