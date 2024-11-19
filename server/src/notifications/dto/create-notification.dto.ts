@@ -1,4 +1,5 @@
 import {
+  IsDate,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -31,4 +32,7 @@ export class NotificationPayload {
   @IsNotEmpty()
   @IsEnum(NotificationType)
   type: NotificationType;
+
+  @IsDate()
+  createdAt: Date;
 }

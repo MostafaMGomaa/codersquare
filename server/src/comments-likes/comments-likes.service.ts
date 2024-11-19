@@ -58,6 +58,7 @@ export class CommentLikesService {
         type: NotificationType.NEW_LIKE_ON_COMMENT,
         commentId: newCommentLike.commentId,
         postId: comment.postId,
+        createdAt: newCommentLike.createdAt,
       });
     }
 

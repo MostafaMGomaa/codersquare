@@ -42,10 +42,11 @@ export class NotificationGateway
     message: string,
     postId: string,
     type: NotificationType,
+    createdAt: Date,
   ) {
     console.log(`Emitting notification to ${userId}`);
     this.server
       .to(`user-${userId}`)
-      .emit('notification', { userId, message, postId, type });
+      .emit('notification', { userId, message, postId, type, createdAt });
   }
 }

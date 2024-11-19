@@ -50,6 +50,7 @@ export class LikesService {
         type: NotificationType.NEW_LIKE_ON_POST,
         userId: newPostLike.authorId,
         postId: post.id,
+        createdAt: newPostLike.createdAt,
       });
     }
 

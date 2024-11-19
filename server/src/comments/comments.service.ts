@@ -52,6 +52,7 @@ export class CommnetsService {
         commentId: newComment.id,
         postId: post.id,
         type: NotificationType.NEW_COMMENT,
+        createdAt: newComment.createdAt,
       });
     }
 

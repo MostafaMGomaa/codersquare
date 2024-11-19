@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DataResult, Notification as INotification } from '@codersquare/shared';
 import { getUserNotifications } from '../../api';
 import { ErrorPage } from '../../pages';
@@ -18,6 +18,7 @@ export const Notification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [realTimeNotifications, setRealTimeNotifications] =
     useState<INotification | null>(null);
+  const queryClient = useQueryClient();
 
   const jwt = localStorage.getItem('jwt') as string;
 
@@ -41,13 +42,28 @@ export const Notification = () => {
     });
   };
 
+  const onChange = (newNotification: INotification) => {
+    queryClient.setQueryData(
+      ['notification'],
+      (oldData?: DataResult<INotification[]>) => {
+        if (!oldData) {
+          return { data: [newNotification], meta: {} };
+        }
+
+        return {
+          ...oldData,
+          data: [newNotification, ...oldData.data],
+        };
+      },
+    );
+  };
+
   useEffect(() => {
     if (jwt) {
       const socket = initSocket();
-      socket?.on('notification', (data: INotification) => {
-        console.log({ data });
-        // setRealTimeNotifications((prev) => [...prev, data]);
-        // Invalidate the query
+      socket?.on('notification', (newNotification: INotification) => {
+        console.log({ newNotification });
+        onChange(newNotification);
       });
     }
     return () => {
@@ -81,7 +97,7 @@ export const Notification = () => {
               }
             />
           ) : (
-            <div className="flex flex-col p-2 gap-2">
+            <div className="flex flex-col p-2 gap-2 max-h-[30rem] overflow-y-scroll">
               {response?.data.map(
                 (notification: INotification, index: number) => (
                   <Link
