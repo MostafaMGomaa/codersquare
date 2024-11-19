@@ -18,8 +18,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('signup')
   async singup(@Body() data: CreateUserDto) {
-    const token = await this.authService.singup(data);
-    return { data: { token } };
+    const response = await this.authService.singup(data);
+    return response;
   }
 
   @HttpCode(HttpStatus.OK)
