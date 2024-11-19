@@ -8,11 +8,11 @@ export class CreatedAtStrategy implements PaginationStrategy {
   applyCursor(
     query: SelectQueryBuilder<Post | Comment>,
     cursor: string | Date = new Date().toISOString(),
-    orderType: OrderType = OrderType.asc,
+    orderType: OrderType = OrderType.desc,
   ): void {
     if (cursor) {
       cursor = new Date(cursor);
-      query.andWhere('d.createdAt > :cursor', { cursor });
+      query.andWhere('d.createdAt < :cursor', { cursor });
     }
 
     query.orderBy(`d.createdAt`, orderType);

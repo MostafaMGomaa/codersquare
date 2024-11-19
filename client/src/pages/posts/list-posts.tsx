@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   InfiniteData,
   QueryKey,
@@ -14,7 +15,6 @@ import { DataResult, Post } from '@codersquare/shared';
 import { getAllPosts } from '../../api';
 import { PostCard, ShadowButton, Spinner } from '../../components';
 import { ErrorPage } from '../error';
-import { useMemo } from 'react';
 
 export const ListPosts = () => {
   const queryClient = useQueryClient();
@@ -39,16 +39,16 @@ export const ListPosts = () => {
         jwt: localStorage.getItem('jwt') as string,
         cursor: pageParam,
         cursorField: 'createdAt',
-        limit: 1,
+        limit: 10,
       }),
     initialPageParam: undefined,
     getNextPageParam: (lastPage) => lastPage.meta?.nextCursor ?? null,
   });
 
-  const posts = useMemo(
-    () => response?.pages.reduce((res) => res.data),
-    [response],
-  );
+  const posts = useMemo(() => {
+    if (!response) return [];
+    return response.pages.flatMap((page) => page.data as Post[]);
+  }, [response]);
 
   function onChange(updatedPost: Partial<Post>) {
     queryClient.setQueryData<InfiniteData<DataResult<Post[]>>>(
@@ -93,19 +93,17 @@ export const ListPosts = () => {
 
   return (
     <div className="flex flex-col gap-x-0.5 place-items-start justify-center container px-[1rem] py-4 ml-3">
-      {response?.pages.map((page: DataResult<Post[]>) =>
-        page.data.map((post: Post) => (
-          <PostCard key={post.id} post={post} onChange={onChange} />
-        )),
-      )}
+      {posts.map((post: Post) => (
+        <PostCard key={post.id} post={post} onChange={onChange} />
+      ))}
 
       <ShadowButton
         text={
           isFetchingNextPage
-            ? 'more...'
+            ? 'Loading more...'
             : hasNextPage
-            ? 'More'
-            : 'Nothing more to load'
+            ? 'Load More'
+            : 'No more posts'
         }
         extraClasses="flex text-orange-800 gap-x-2 ml-0"
         icon={
