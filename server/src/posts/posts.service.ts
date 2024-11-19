@@ -44,15 +44,15 @@ export class PostsService {
         secret: this.config.get<string>('JWT_SECRET'),
       });
 
-      let userId = payload.id;
+      const userId = payload.id;
 
       query
         .leftJoin('d.likes', 'like')
         .addSelect(
           `CASE
-            WHEN like.authorId = :userId THEN true
-            ELSE false
-          END`,
+          WHEN like.authorId = :userId THEN true
+          ELSE false
+        END`,
           'd_likedByUserBefore',
         )
         .setParameter('userId', userId);
@@ -60,9 +60,13 @@ export class PostsService {
 
     strategy.applyCursor(query, cursor, orderType);
 
-    const data = await query.take(limit).getMany();
+    const data = await query.take(limit + 1).getMany();
 
-    const nextCursor = strategy.getNextCursor(data);
+    const nextCursor = strategy.getNextCursor(data, limit);
+
+    if (data.length > limit) {
+      data.pop();
+    }
 
     return {
       data,

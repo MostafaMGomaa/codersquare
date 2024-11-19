@@ -9,5 +9,5 @@ export interface PaginationStrategy {
     cursor: string,
     orderType: OrderType,
   ): void;
-  getNextCursor(data: Post[] | Comment[]): string | null;
+  getNextCursor(data: Post[] | Comment[], limit: number): string | null;
 }

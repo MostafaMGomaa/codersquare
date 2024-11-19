@@ -84,7 +84,7 @@ export class CommnetsService {
     strategy.applyCursor(query, cursor, orderType);
 
     const data = await query.take(limit).getMany();
-    const nextCursor = strategy.getNextCursor(data);
+    const nextCursor = strategy.getNextCursor(data, limit);
 
     return {
       data,

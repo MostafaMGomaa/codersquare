@@ -3,7 +3,6 @@ import { PaginationStrategy } from './pagination-strategy.interface';
 import { Comment } from 'src/comments/comments.entity';
 import { OrderType } from 'src/types';
 import { SelectQueryBuilder } from 'typeorm';
-
 export class CreatedAtStrategy implements PaginationStrategy {
   applyCursor(
     query: SelectQueryBuilder<Post | Comment>,
@@ -12,15 +11,20 @@ export class CreatedAtStrategy implements PaginationStrategy {
   ): void {
     if (cursor) {
       cursor = new Date(cursor);
-      query.andWhere('d.createdAt < :cursor', { cursor });
+      query.andWhere(
+        `d.createdAt ${orderType === OrderType.desc ? '<' : '>'} :cursor`,
+        { cursor },
+      );
     }
 
     query.orderBy(`d.createdAt`, orderType);
   }
 
-  getNextCursor(data: Post[] | Comment[]): string | null {
-    return data.length > 0
-      ? data[data.length - 1].createdAt.toISOString()
-      : null;
+  getNextCursor(data: Post[] | Comment[], limit: number): string | null {
+    if (data.length === limit + 1) {
+      return data[data.length - 1].createdAt.toISOString();
+    }
+
+    return null;
   }
 }

@@ -1,5 +1,5 @@
 export interface DataResult<T> {
-  data: T[] | T | string;
+  data: T[] | T;
   meta?: {
     count: number;
     nextCursor: string | null;
