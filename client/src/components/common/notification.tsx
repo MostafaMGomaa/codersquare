@@ -18,6 +18,7 @@ export const Notification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [realTimeNotifications, setRealTimeNotifications] =
     useState<INotification | null>(null);
+
   const queryClient = useQueryClient();
 
   const jwt = localStorage.getItem('jwt') as string;
@@ -26,18 +27,15 @@ export const Notification = () => {
     data: response,
     isLoading,
     error,
-    refetch,
   } = useQuery<DataResult<INotification[]>>({
     queryKey: ['notification'],
     queryFn: () => getUserNotifications(jwt),
-    enabled: false,
   });
-
+  const [unreadCount, setUnreadCount] = useState(
+    response?.meta?.unreadCount || 0,
+  );
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => {
-      if (!prev) {
-        refetch();
-      }
       return !prev;
     });
   };
@@ -78,6 +76,13 @@ export const Notification = () => {
         onClick={toggleDropdown}
       >
         <FontAwesomeIcon icon={faBell} />
+        {unreadCount && (
+          <span className="absolute inset-0  -mr-7 ">
+            <div className="inline-flex items-center px-1 py-0 border-2 border-white rounded-full text-xs leading-4 bg-red-500 text-white  h-5 w-5">
+              {unreadCount}
+            </div>
+          </span>
+        )}
       </button>
 
       {isDropdownOpen && (

@@ -22,7 +22,7 @@ export class CreatedAtStrategy implements PaginationStrategy {
 
   getNextCursor(data: Post[] | Comment[], limit: number): string | null {
     if (data.length === limit + 1) {
-      return data[data.length - 1].createdAt.toISOString();
+      return data[data.length - 2].createdAt.toISOString();
     }
 
     return null;

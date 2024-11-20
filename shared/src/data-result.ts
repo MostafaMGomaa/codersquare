@@ -1,7 +1,8 @@
 export interface DataResult<T> {
   data: T[] | T;
   meta?: {
-    count: number;
-    nextCursor: string | null;
+    count?: number;
+    nextCursor?: string | null;
+    unreadCount?: number;
   };
 }

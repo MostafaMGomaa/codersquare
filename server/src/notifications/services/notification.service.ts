@@ -37,13 +37,30 @@ export class NotificationService implements OnApplicationBootstrap {
   async findUserNotification(
     userId: string,
   ): Promise<DataResult<Notification[]>> {
-    const data = await this.notificationRepo
+    const query = this.notificationRepo
       .createQueryBuilder('notification')
-      .where('notification.recipientId=:userId', { userId })
-      .orderBy('created_at', 'DESC')
-      .limit(5)
-      .getMany();
+      .where('notification.recipientId = :userId', { userId })
+      .addSelect(
+        `(
+        SELECT COUNT(*) 
+        FROM notification AS "unreadNotifications"
+        WHERE "unreadNotifications"."recipientId" = :userId AND "unreadNotifications"."isRead" = false
+      )`,
+        'unreadCount',
+      )
+      .orderBy('notification.created_at', 'DESC')
+      .limit(5);
 
-    return { data };
+    const data = await query.getMany();
+    const unreadCount = await query
+      .getRawOne()
+      .then((res) => parseInt(res.unreadCount, 10));
+
+    return {
+      data,
+      meta: {
+        unreadCount,
+      },
+    };
   }
 }
