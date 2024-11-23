@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import {
   faBell,
   faComment,
@@ -9,7 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DataResult, Notification as INotification } from '@codersquare/shared';
-import { getUserNotifications } from '../../api';
+import {
+  getUserNotifications,
+  useUpdateNotificationsMutation,
+} from '../../api';
 import { ErrorPage } from '../../pages';
 import { Spinner } from './spinner';
 import { getTimeAgo, initSocket, disconnectSocket } from '../../utils';
@@ -29,97 +32,84 @@ export const Notification = () => {
     queryKey: ['notification'],
     queryFn: () => getUserNotifications(jwt),
   });
+  const updateNotificationMutation = useUpdateNotificationsMutation();
 
-  const [unreadCount, setUnreadCount] = useState(
-    response?.meta?.unreadCount || 0,
+  const unreadCount = useMemo(
+    () => response?.meta?.unreadCount || 0,
+    [response],
   );
 
   const handleUnReadNotification = (id: string) => {
     if (!readNotifications.includes(id)) {
-      setReadNotifications((prevReadNotifications: string[]) => [
-        ...prevReadNotifications,
-        id,
-      ]);
+      setReadNotifications((prev) => [...new Set([...prev, id])]);
     }
+    if (unreadCount > 0) {
+      queryClient.setQueryData(
+        ['notification'],
+        (oldData?: DataResult<INotification[]>) => {
+          if (!oldData) return oldData;
 
-    if (unreadCount > 0) setUnreadCount((prev) => prev - 1);
+          const updatedData = oldData.data.map(
+            (notification: Partial<INotification>) =>
+              notification.id === id
+                ? { ...notification, isRead: true }
+                : notification,
+          );
 
-    queryClient.setQueryData(
-      ['notification'],
-      (oldData?: DataResult<INotification[]>) => {
-        if (!oldData) return oldData;
-
-        const updatedData = oldData.data.map(
-          (notification: Partial<INotification>) =>
-            notification.id === id
-              ? { ...notification, isRead: true }
-              : notification,
-        );
-
-        return {
-          ...oldData,
-          data: updatedData,
-        };
-      },
-    );
+          return { ...oldData, data: updatedData };
+        },
+      );
+    }
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prev) => {
-      if (!isDropdownOpen) {
-        setReadNotifications([]);
-        console.log({ readNotifications });
-        // Send the request here
-      }
-      return !prev;
-    });
+  const toggleDropdown = async () => {
+    console.log({ isDropdownOpen });
+    if (isDropdownOpen) {
+      await updateNotificationMutation.mutateAsync({
+        ids: readNotifications,
+        jwt,
+      });
+      setReadNotifications([]);
+    }
+    setIsDropdownOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (jwt) {
+      const socket = initSocket();
+      const onNotification = (newNotification: INotification) =>
+        onChange(newNotification);
+
+      socket?.on('notification', onNotification);
+
+      return () => {
+        socket?.off('notification', onNotification);
+        disconnectSocket();
+      };
+    }
+  }, [jwt]);
 
   const onChange = (newNotification: INotification) => {
     queryClient.setQueryData(
       ['notification'],
       (oldData?: DataResult<INotification[]>) => {
-        if (!oldData) {
-          return { data: [newNotification], meta: {} };
-        }
-
-        return {
-          ...oldData,
-          data: [newNotification, ...oldData.data],
-        };
+        if (!oldData) return { data: [newNotification], meta: {} };
+        return { ...oldData, data: [newNotification, ...oldData.data] };
       },
     );
   };
 
-  useEffect(() => {
-    if (response?.meta?.unreadCount !== undefined) {
-      setUnreadCount(response?.meta?.unreadCount);
-    }
-  }, [response]);
-
-  useEffect(() => {
-    if (jwt) {
-      const socket = initSocket();
-      socket?.on('notification', (newNotification: INotification) => {
-        console.log({ newNotification });
-        onChange(newNotification);
-      });
-    }
-    return () => {
-      disconnectSocket();
-    };
-  }, [jwt]);
-
   return (
     <div className="relative">
       <button
+        aria-label="Notifications"
         className="flex items-center gap-x-2 p-2 text-gray-500 font-semibold hover:text-gray-800 focus:outline-none"
         onClick={toggleDropdown}
       >
         <FontAwesomeIcon icon={faBell} className="text-xl" />
-        {unreadCount && (
-          <span className="absolute inset-0 mr-9 ">
-            <div className="inline-flex items-center px-1 py-1 border-0 border-white rounded-full text-sm bg-red-500 text-white  h-5 w-5">
+        {unreadCount > 0 && (
+          <span className="absolute inset-0 mr-9">
+            <div className="inline-flex items-center px-1 py-1 border-0 border-white rounded-full text-sm bg-red-500 text-white h-5 w-5">
               {unreadCount}
             </div>
           </span>
@@ -144,37 +134,35 @@ export const Notification = () => {
             />
           ) : (
             <div className="flex flex-col p-2 gap-2 max-h-[30rem] overflow-y-scroll">
-              {response?.data.map(
-                (notification: Partial<INotification>, index: number) => (
-                  <Link
-                    to={`post/${notification.postId}`}
-                    key={index}
-                    className={`flex items-center gap-3 p-3 text-gray-600 hover:bg-gray-100 hover:text-orange-800 rounded-lg transition-all duration-200 cursor-pointer ${
-                      !notification.isRead ? 'bg-slate-200' : ''
-                    }`}
-                    onClick={() => setIsDropdownOpen(false)}
-                    onMouseEnter={() => {
-                      if (!notification.isRead)
-                        handleUnReadNotification(notification.id!);
-                    }}
-                  >
-                    <FontAwesomeIcon
-                      icon={
-                        notification.type === 'NEW_COMMENT'
-                          ? faComment
-                          : faThumbsUp
-                      }
-                      className="flex content-center justify-center text-xl"
-                    />
-                    <span className="flex flex-col flex-grow">
-                      <p className="flex"> {notification.message}</p>
-                      <p className="flex justify-end items-end text-gray-400 text-xs">
-                        {getTimeAgo(notification.createdAt!)}
-                      </p>
-                    </span>
-                  </Link>
-                ),
-              )}
+              {response?.data.map((notification, index) => (
+                <Link
+                  to={notification.postId ? `post/${notification.postId}` : '#'}
+                  key={index}
+                  className={`flex items-center gap-3 p-3 text-gray-600 hover:bg-gray-100 hover:text-orange-800 rounded-lg transition-all duration-200 cursor-pointer ${
+                    !notification.isRead ? 'bg-slate-200' : ''
+                  }`}
+                  onClick={() => setIsDropdownOpen(false)}
+                  onMouseEnter={() =>
+                    !notification.isRead &&
+                    handleUnReadNotification(notification.id!)
+                  }
+                >
+                  <FontAwesomeIcon
+                    icon={
+                      notification.type === 'NEW_COMMENT'
+                        ? faComment
+                        : faThumbsUp
+                    }
+                    className="flex content-center justify-center text-xl"
+                  />
+                  <span className="flex flex-col flex-grow">
+                    <p>{notification.message}</p>
+                    <p className="text-gray-400 text-xs text-right">
+                      {getTimeAgo(notification.createdAt!)}
+                    </p>
+                  </span>
+                </Link>
+              ))}
             </div>
           )}
         </div>

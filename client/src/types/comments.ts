@@ -11,3 +11,11 @@ export interface CreateCommentPayload {
   jwt: string;
   postId: string;
 }
+
+export interface UpdateNotificationsPayload {
+  ids: string[];
+  jwt: string;
+}
+export interface UpdateNotificationsResponse {
+  message: string;
+}

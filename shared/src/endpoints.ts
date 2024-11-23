@@ -37,6 +37,7 @@ export enum EndpointsUrl {
 
   /** Notification */
   getUserNotification = 'notifications/',
+  updateNotifications = 'notifications/',
 }
 
 export enum Endpoints {
@@ -70,6 +71,7 @@ export enum Endpoints {
 
   /** Notification */
   getUserNotification = 'getUserNotification',
+  updateNotifications = 'updateNotifications',
 }
 
 export const ENDPOINTS_CONFIGS = {
@@ -158,6 +160,11 @@ export const ENDPOINTS_CONFIGS = {
   [Endpoints.getUserNotification]: {
     method: 'get',
     url: EndpointsUrl.getUserNotification,
+    auth: true,
+  },
+  [Endpoints.updateNotifications]: {
+    method: 'PATCH',
+    url: EndpointsUrl.updateNotifications,
     auth: true,
   },
 };
