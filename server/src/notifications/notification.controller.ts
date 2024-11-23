@@ -1,4 +1,12 @@
-import { Controller, Get, Req, UseFilters, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Patch,
+  Req,
+  UseFilters,
+  UseGuards,
+} from '@nestjs/common';
 import { NotificationService } from './services';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TypeormExceptionFilter } from 'src/common';
@@ -16,5 +24,10 @@ export class NotificationController {
       req.query.limit,
       req.query.skip,
     );
+  }
+
+  @Patch('')
+  async update(@Body() data) {
+    return await this.notificationService.updateIsRead(data.ids);
   }
 }

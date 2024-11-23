@@ -1,5 +1,5 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Observer } from '../interfaces';
@@ -66,6 +66,21 @@ export class NotificationService implements OnApplicationBootstrap {
       meta: {
         unreadCount,
       },
+    };
+  }
+
+  async updateIsRead(ids: string[]) {
+    await this.notificationRepo
+      .createQueryBuilder()
+      .update(Notification)
+      .set({ isRead: true })
+      .where({
+        id: In(ids),
+      })
+      .execute();
+
+    return {
+      message: 'Update successful',
     };
   }
 }
