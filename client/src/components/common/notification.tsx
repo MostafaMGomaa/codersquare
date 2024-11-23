@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import {
   faBell,
   faComment,
@@ -20,6 +20,7 @@ import { getTimeAgo, initSocket, disconnectSocket } from '../../utils';
 export const Notification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [readNotifications, setReadNotifications] = useState<string[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const queryClient = useQueryClient();
 
   const jwt = localStorage.getItem('jwt') as string;
@@ -32,38 +33,34 @@ export const Notification = () => {
     queryKey: ['notification'],
     queryFn: () => getUserNotifications(jwt),
   });
-  const updateNotificationMutation = useUpdateNotificationsMutation();
 
-  const unreadCount = useMemo(
-    () => response?.meta?.unreadCount || 0,
-    [response],
-  );
+  const updateNotificationMutation = useUpdateNotificationsMutation();
 
   const handleUnReadNotification = (id: string) => {
     if (!readNotifications.includes(id)) {
-      setReadNotifications((prev) => [...new Set([...prev, id])]);
+      setReadNotifications((prev) => [...prev, id]);
     }
-    if (unreadCount > 0) {
-      queryClient.setQueryData(
-        ['notification'],
-        (oldData?: DataResult<INotification[]>) => {
-          if (!oldData) return oldData;
 
-          const updatedData = oldData.data.map(
-            (notification: Partial<INotification>) =>
-              notification.id === id
-                ? { ...notification, isRead: true }
-                : notification,
-          );
+    setUnreadCount((prev) => Math.max(prev - 1, 0));
 
-          return { ...oldData, data: updatedData };
-        },
-      );
-    }
+    queryClient.setQueryData(
+      ['notification'],
+      (oldData?: DataResult<INotification[]>) => {
+        if (!oldData) return oldData;
+
+        const updatedData = oldData.data.map(
+          (notification: Partial<INotification>) =>
+            notification.id === id
+              ? { ...notification, isRead: true }
+              : notification,
+        );
+
+        return { ...oldData, data: updatedData };
+      },
+    );
   };
 
   const toggleDropdown = async () => {
-    console.log({ isDropdownOpen });
     if (isDropdownOpen) {
       await updateNotificationMutation.mutateAsync({
         ids: readNotifications,
@@ -73,6 +70,10 @@ export const Notification = () => {
     }
     setIsDropdownOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    setUnreadCount(response?.meta?.unreadCount || 0);
+  }, [response]);
 
   useEffect(() => {
     if (jwt) {
@@ -97,6 +98,8 @@ export const Notification = () => {
         return { ...oldData, data: [newNotification, ...oldData.data] };
       },
     );
+
+    setUnreadCount((prev) => prev + 1);
   };
 
   return (
