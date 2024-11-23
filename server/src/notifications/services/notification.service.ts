@@ -36,6 +36,8 @@ export class NotificationService implements OnApplicationBootstrap {
 
   async findUserNotification(
     userId: string,
+    limit: number,
+    skip: number,
   ): Promise<DataResult<Notification[]>> {
     const query = this.notificationRepo
       .createQueryBuilder('notification')
@@ -49,7 +51,8 @@ export class NotificationService implements OnApplicationBootstrap {
         'unreadCount',
       )
       .orderBy('notification.created_at', 'DESC')
-      .limit(5);
+      .skip(skip)
+      .limit(limit);
 
     const data = await query.getMany();
 

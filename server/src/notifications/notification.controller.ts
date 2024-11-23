@@ -11,6 +11,10 @@ export class NotificationController {
 
   @Get('/')
   findByUseId(@Req() req) {
-    return this.notificationService.findUserNotification(req.user.id);
+    return this.notificationService.findUserNotification(
+      req.user.id,
+      req.query.limit,
+      req.query.skip,
+    );
   }
 }
