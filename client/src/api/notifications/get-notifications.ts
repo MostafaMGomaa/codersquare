@@ -3,7 +3,7 @@ import { SendRequest } from '../sendRequest';
 
 export const getUserNotifications = async (
   jwt: string,
-  limit = 5,
+  limit = 10,
   skip = 0,
 ) => {
   const endpoint = ENDPOINTS_CONFIGS[Endpoints.getUserNotification];

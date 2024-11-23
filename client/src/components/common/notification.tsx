@@ -37,11 +37,11 @@ export const Notification = () => {
   const updateNotificationMutation = useUpdateNotificationsMutation();
 
   const handleUnReadNotification = (id: string) => {
-    if (!readNotifications.includes(id)) {
-      setReadNotifications((prev) => [...prev, id]);
-    }
+    if (readNotifications.includes(id)) return;
 
-    setUnreadCount((prev) => Math.max(prev - 1, 0));
+    setReadNotifications((prev) => [...prev, id]);
+
+    setUnreadCount((prev) => Math.max(0, prev - 1));
 
     queryClient.setQueryData(
       ['notification'],
