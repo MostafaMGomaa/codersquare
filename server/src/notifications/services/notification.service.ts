@@ -52,9 +52,11 @@ export class NotificationService implements OnApplicationBootstrap {
       .limit(5);
 
     const data = await query.getMany();
-    const unreadCount = await query
-      .getRawOne()
-      .then((res) => parseInt(res.unreadCount, 10));
+    console.log({ data });
+    const unreadCount =
+      (await query
+        .getRawOne()
+        .then((res) => parseInt(res.unreadCount || 0, 10))) || 0;
 
     return {
       data,
