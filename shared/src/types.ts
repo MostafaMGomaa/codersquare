@@ -62,4 +62,5 @@ export interface Notification extends IAbstract {
   postId: string;
   commentId: string;
   isRead: boolean;
+  createdAt: Date;
 }

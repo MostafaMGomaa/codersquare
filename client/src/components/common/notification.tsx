@@ -16,9 +16,7 @@ import { getTimeAgo, initSocket, disconnectSocket } from '../../utils';
 
 export const Notification = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [realTimeNotifications, setRealTimeNotifications] =
-    useState<INotification | null>(null);
-
+  const [readNotifications, setReadNotifications] = useState<string[]>([]);
   const queryClient = useQueryClient();
 
   const jwt = localStorage.getItem('jwt') as string;
@@ -31,11 +29,48 @@ export const Notification = () => {
     queryKey: ['notification'],
     queryFn: () => getUserNotifications(jwt),
   });
+
   const [unreadCount, setUnreadCount] = useState(
     response?.meta?.unreadCount || 0,
   );
+
+  const handleUnReadNotification = (id: string) => {
+    if (!readNotifications.includes(id)) {
+      setReadNotifications((prevReadNotifications: string[]) => [
+        ...prevReadNotifications,
+        id,
+      ]);
+    }
+
+    if (unreadCount > 0) setUnreadCount((prev) => prev - 1);
+
+    queryClient.setQueryData(
+      ['notification'],
+      (oldData?: DataResult<INotification[]>) => {
+        if (!oldData) return oldData;
+
+        const updatedData = oldData.data.map(
+          (notification: Partial<INotification>) =>
+            notification.id === id
+              ? { ...notification, isRead: true }
+              : notification,
+        );
+
+        return {
+          ...oldData,
+          data: updatedData,
+        };
+      },
+    );
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => {
+      if (!isDropdownOpen) {
+        setReadNotifications([]);
+        console.log({ readNotifications });
+        // Send the request here
+      }
       return !prev;
     });
   };
@@ -57,6 +92,12 @@ export const Notification = () => {
   };
 
   useEffect(() => {
+    if (response?.meta?.unreadCount !== undefined) {
+      setUnreadCount(response?.meta?.unreadCount);
+    }
+  }, [response]);
+
+  useEffect(() => {
     if (jwt) {
       const socket = initSocket();
       socket?.on('notification', (newNotification: INotification) => {
@@ -75,10 +116,10 @@ export const Notification = () => {
         className="flex items-center gap-x-2 p-2 text-gray-500 font-semibold hover:text-gray-800 focus:outline-none"
         onClick={toggleDropdown}
       >
-        <FontAwesomeIcon icon={faBell} />
+        <FontAwesomeIcon icon={faBell} className="text-xl" />
         {unreadCount && (
-          <span className="absolute inset-0  -mr-7 ">
-            <div className="inline-flex items-center px-1 py-0 border-2 border-white rounded-full text-xs leading-4 bg-red-500 text-white  h-5 w-5">
+          <span className="absolute inset-0 mr-9 ">
+            <div className="inline-flex items-center px-1 py-1 border-0 border-white rounded-full text-sm bg-red-500 text-white  h-5 w-5">
               {unreadCount}
             </div>
           </span>
@@ -104,12 +145,18 @@ export const Notification = () => {
           ) : (
             <div className="flex flex-col p-2 gap-2 max-h-[30rem] overflow-y-scroll">
               {response?.data.map(
-                (notification: INotification, index: number) => (
+                (notification: Partial<INotification>, index: number) => (
                   <Link
                     to={`post/${notification.postId}`}
                     key={index}
-                    className="flex items-center gap-3 p-3 text-gray-600 hover:bg-gray-100 hover:text-orange-800 rounded-lg transition-all duration-200 cursor-pointer"
+                    className={`flex items-center gap-3 p-3 text-gray-600 hover:bg-gray-100 hover:text-orange-800 rounded-lg transition-all duration-200 cursor-pointer ${
+                      !notification.isRead ? 'bg-slate-200' : ''
+                    }`}
                     onClick={() => setIsDropdownOpen(false)}
+                    onMouseEnter={() => {
+                      if (!notification.isRead)
+                        handleUnReadNotification(notification.id!);
+                    }}
                   >
                     <FontAwesomeIcon
                       icon={
@@ -122,7 +169,7 @@ export const Notification = () => {
                     <span className="flex flex-col flex-grow">
                       <p className="flex"> {notification.message}</p>
                       <p className="flex justify-end items-end text-gray-400 text-xs">
-                        {getTimeAgo(notification.createdAt)}
+                        {getTimeAgo(notification.createdAt!)}
                       </p>
                     </span>
                   </Link>
