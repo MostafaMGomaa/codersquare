@@ -52,7 +52,7 @@ export class NotificationService implements OnApplicationBootstrap {
       .limit(5);
 
     const data = await query.getMany();
-    console.log({ data });
+
     const unreadCount =
       (await query
         .getRawOne()
