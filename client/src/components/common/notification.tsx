@@ -112,8 +112,12 @@ export const Notification = () => {
         <FontAwesomeIcon icon={faBell} className="text-xl" />
         {unreadCount > 0 && (
           <span className="absolute inset-0 mr-9">
-            <div className="inline-flex items-center px-1 py-1 border-0 border-white rounded-full text-sm bg-red-500 text-white h-5 w-5">
-              {unreadCount}
+            <div
+              className={`inline-flex items-center border-0 border-white rounded-full text-xs bg-red-500 text-white h-5 w-5 py-1 ${
+                unreadCount > 9 ? 'px-1' : 'px-2'
+              } `}
+            >
+              {unreadCount > 9 ? '+9' : unreadCount}
             </div>
           </span>
         )}
